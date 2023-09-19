@@ -1,6 +1,8 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">{{ $t('login.form.title') }}</div>
+    <div class="login-logo">
+      <img src="../../../assets/images/logo.png" alt="" />
+    </div>
     <div class="login-form-sub-title">{{ $t('login.form.title') }}</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
@@ -11,14 +13,14 @@
       @submit="handleSubmit"
     >
       <a-form-item
-        field="username"
-        :rules="[{ required: true, message: $t('login.form.userName.errMsg') }]"
+        field="email"
+        :rules="[{ required: true, message: $t('login.form.email.errMsg') }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
         <a-input
-          v-model="userInfo.username"
-          :placeholder="$t('login.form.userName.placeholder')"
+          v-model="userInfo.email"
+          :placeholder="$t('login.form.email.placeholder')"
         >
           <template #prefix>
             <icon-user />
@@ -41,6 +43,22 @@
           </template>
         </a-input-password>
       </a-form-item>
+      <a-form-item
+        field="code"
+        :rules="[{ required: false, message: $t('login.form.code.errMsg') }]"
+        :validate-trigger="['change', 'blur']"
+        hide-label
+      >
+        <a-input
+          v-model="userInfo.code"
+          :placeholder="$t('login.form.code.placeholder')"
+        >
+          <template #prefix>
+            <icon-email />
+          </template>
+        </a-input>
+      </a-form-item>
+
       <a-space :size="16" direction="vertical">
         <div class="login-form-password-actions">
           <a-checkbox
@@ -82,12 +100,14 @@
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
-    username: 'admin', // 演示默认值
-    password: 'admin', // demo default value
+    email: 'admin@fsx.com', // 演示默认值
+    password: 'ab12345678',
+    code: 123,
   });
   const userInfo = reactive({
-    username: loginConfig.value.username,
+    email: loginConfig.value.email,
     password: loginConfig.value.password,
+    code: loginConfig.value.code,
   });
 
   const handleSubmit = async ({
@@ -104,17 +124,16 @@
         await userStore.login(values as LoginData);
         const { redirect, ...othersQuery } = router.currentRoute.value.query;
         router.push({
-          name: (redirect as string) || 'Workplace',
+          name: (redirect as string) || 'myTask',
           query: {
             ...othersQuery,
           },
         });
         Message.success(t('login.form.login.success'));
         const { rememberPassword } = loginConfig.value;
-        const { username, password } = values;
+        const { email, password, code } = values;
         // 实际生产环境需要进行加密存储。
-        // The actual production environment requires encrypted storage.
-        loginConfig.value.username = rememberPassword ? username : '';
+        loginConfig.value.email = rememberPassword ? email : '';
         loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
@@ -129,22 +148,37 @@
 </script>
 
 <style lang="less" scoped>
+  .login-form-wrapper {
+    color: #ffffff;
+    align-content: center;
+    text-align: center;
+    .login-logo {
+      img {
+        width: 290px;
+        align-items: center;
+      }
+    }
+  }
   .login-form {
+    color: #ffffff;
     &-wrapper {
       width: 320px;
     }
 
     &-title {
-      color: var(--color-text-1);
+      color: #ffffff;
       font-weight: 500;
       font-size: 24px;
       line-height: 32px;
     }
 
     &-sub-title {
-      color: var(--color-text-3);
-      font-size: 16px;
+      padding-top: 15px;
+      color: #ffffff;
+      font-size: 15px;
       line-height: 24px;
+      font-weight: 800;
+      text-align: center;
     }
 
     &-error-msg {

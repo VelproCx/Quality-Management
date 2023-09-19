@@ -16,21 +16,21 @@ setupMock({
       if (isLogin()) {
         const role = window.localStorage.getItem('userRole') || 'admin';
         return successResponseWrap({
-          name: '王立群',
+          name: 'Admin',
           avatar:
             '//lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png',
-          email: 'wangliqun@email.com',
+          email: 'admin@fsx.com',
           job: 'frontend',
           jobName: '前端艺术家',
           organization: 'Frontend',
           organizationName: '前端',
           location: 'beijing',
-          locationName: '北京',
+          locationName: 'hunan',
           introduction: '人潇洒，性温存',
           personalWebsite: 'https://www.arco.design',
           phone: '150****0000',
           registrationDate: '2013-05-10 12:10:00',
-          accountId: '15012312300',
+          accountId: '123123123',
           certification: 1,
           role,
         });
@@ -40,20 +40,23 @@ setupMock({
 
     // 登录
     Mock.mock(new RegExp('/api/user/login'), (params: MockParams) => {
-      const { username, password } = JSON.parse(params.body);
-      if (!username) {
-        return failResponseWrap(null, '用户名不能为空', 50000);
+      const { email, password, code } = JSON.parse(params.body);
+      if (!email) {
+        return failResponseWrap(null, ' 邮箱号错误', 50000);
       }
       if (!password) {
-        return failResponseWrap(null, '密码不能为空', 50000);
+        return failResponseWrap(null, '密码错误', 50000);
       }
-      if (username === 'admin' && password === 'admin') {
+      if (!code) {
+        return failResponseWrap(null, '验证码错误', 50000);
+      }
+      if (email === 'admin@fsx.com' && password === 'ab12345678') {
         window.localStorage.setItem('userRole', 'admin');
         return successResponseWrap({
           token: '12345',
         });
       }
-      if (username === 'user' && password === 'user') {
+      if (email === 'user' && password === 'user') {
         window.localStorage.setItem('userRole', 'user');
         return successResponseWrap({
           token: '54321',

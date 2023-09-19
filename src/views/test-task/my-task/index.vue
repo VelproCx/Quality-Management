@@ -220,8 +220,7 @@
   import Sortable from 'sortablejs';
   import { Pagination } from '@/types/global';
   import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/task';
-  import { Message } from 'arco-ui';
-  //   import TaskManager from './TaskManager.vue';
+  //   import { Message } from 'arco-ui';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
@@ -343,7 +342,7 @@
       pagination.total = data.total;
     } catch (err) {
       // you can report use errorHandler or other
-      Message.error('请求失败，请稍后重试');
+      //   Message.error('请求失败，请稍后重试');
       console.error(err);
     } finally {
       setLoading(false);

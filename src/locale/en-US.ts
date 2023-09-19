@@ -1,6 +1,6 @@
 import localeMessageBox from '@/components/message-box/locale/en-US';
 import localeLogin from '@/views/login/locale/en-US';
-
+import localeTask from '@/views/test-task/my-task/locale/en-US';
 import localeWorkplace from '@/views/dashboard/workplace/locale/en-US';
 
 import localeSettings from './en-US/settings';
@@ -12,6 +12,7 @@ export default {
   'menu.server.monitor': 'Monitor-Server',
   'menu.list': 'List',
   'menu.result': 'Result',
+  'menu.task': 'Test Task',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
   'menu.profile': 'Profile',
@@ -21,8 +22,10 @@ export default {
   'menu.faq': 'FAQ',
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
+  //   'menu.task.myTask': 'My Task',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
   ...localeWorkplace,
+  ...localeTask,
 };

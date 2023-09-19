@@ -1,5 +1,5 @@
 <template>
-  <a-layout-footer class="footer">Arco Pro</a-layout-footer>
+  <a-layout-footer class="footer"></a-layout-footer>
 </template>
 
 <script lang="ts" setup></script>
@@ -8,9 +8,10 @@
   .footer {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     height: 40px;
-    color: var(--color-text-2);
+    color: white;
     text-align: center;
+    margin-right: 330px;
   }
 </style>

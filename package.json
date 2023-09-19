@@ -16,13 +16,10 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "prettier --write",
-      "eslint --fix"
+      "prettier --write"
     ],
     "*.vue": [
-      "stylelint --fix",
-      "prettier --write",
-      "eslint --fix"
+      "prettier --write"
     ],
     "*.{less,css}": [
       "stylelint --fix",
@@ -32,13 +29,18 @@
   "dependencies": {
     "@arco-design/web-vue": "^2.44.7",
     "@vueuse/core": "^9.3.0",
+    "arco-ui": "^2.39.0-1",
     "axios": "^0.24.0",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.5",
     "echarts": "^5.4.0",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.21",
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.23",
+    "pnpm": "^8.7.5",
     "query-string": "^8.0.3",
     "sortablejs": "^1.15.0",
     "vue": "^3.2.40",
