@@ -1,6 +1,6 @@
 import localeMessageBox from '@/components/message-box/locale/zh-CN';
 import localeLogin from '@/views/login/locale/zh-CN';
-import localeTask from '@/views/test-task/my-task/locale/zh-CN';
+import localeTask from '@/views/task-management/my-task/locale/zh-CN';
 import localeWorkplace from '@/views/dashboard/workplace/locale/zh-CN';
 
 import localeSettings from './zh-CN/settings';

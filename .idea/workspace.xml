@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4a49e4aa-4472-44f9-bb8c-5665238cbdf2" name="Changes" comment="add task management">
+      <change beforePath="$PROJECT_DIR$/.husky/commit-msg" beforeDir="false" afterPath="$PROJECT_DIR$/.husky/commit-msg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/images/login-banner.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/footer/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/footer/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/navbar/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/navbar/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/locale/en-US.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/locale/en-US.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/locale/zh-CN.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/locale/zh-CN.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mock/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mock/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/routes/externalModules/arco.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/externalModules/arco.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/routes/externalModules/faq.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/externalModules/faq.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/routes/modules/dashboard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/modules/dashboard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/login/components/login-form.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/components/login-form.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/login/locale/en-US.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/locale/en-US.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/login/locale/zh-CN.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/locale/zh-CN.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/test-task/my-task/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/test-task/my-task/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2VOJxvl5xFJxCt4N4ebsgNyImJa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;/Users/elevenchen/Desktop/FSX-ADMIN-QA/node_modules/stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/elevenchen/Desktop/FSX-ADMIN-QA/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a49e4aa-4472-44f9-bb8c-5665238cbdf2" name="Changes" comment="" />
+      <created>1694701444292</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694701444292</updated>
+      <workItem from="1694701445384" duration="1007000" />
+      <workItem from="1694702658122" duration="16000" />
+      <workItem from="1695116514642" duration="122000" />
+      <workItem from="1695118649144" duration="55000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add task management" />
+    <option name="LAST_COMMIT_MESSAGE" value="add task management" />
+  </component>
+</project>

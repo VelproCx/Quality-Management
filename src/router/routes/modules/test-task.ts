@@ -20,7 +20,7 @@ const TASK: AppRouteRecordRaw = {
         requiresAuth: true,
         roles: ['*'],
       },
-      component: () => import('@/views/test-task/my-task/index.vue'),
+      component: () => import('@/views/task-management/my-task/index.vue'),
     },
   ],
 };
