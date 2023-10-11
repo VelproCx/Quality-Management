@@ -24,5 +24,5 @@ app.use(store);
 app.use(i18n);
 app.use(globalComponents);
 app.use(directive);
-
+app.config.warnHandler = () => {};
 app.mount('#app');

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.task', 'menu.task.myTask']" />
+    <Breadcrumb :items="['menu.rolx', 'menu.rolx.fullstock']" />
     <a-card class="general-card" :title="$t('menu.task.searchTable')">
       <a-row>
         <a-col :flex="1">
@@ -13,34 +13,12 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
-                  field="TapdId"
-                  :label="$t('searchTable.form.TapdId')"
-                >
-                  <a-input
-                    v-model="formModel.id"
-                    :placeholder="$t('searchTable.form.TapdId.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="Taskname"
-                  :label="$t('searchTable.form.Taskname')"
+                  field="Source"
+                  :label="$t('searchTable.form.Source')"
                 >
                   <a-input
                     v-model="formModel.taskName"
-                    :placeholder="$t('searchTable.form.Taskname.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="createdTime"
-                  :label="$t('searchTable.form.createdTime')"
-                >
-                  <a-range-picker
-                    v-model="formModel.createdTime"
-                    style="width: 100%"
+                    :placeholder="$t('searchTable.form.Source.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -56,10 +34,21 @@
                   />
                 </a-form-item>
               </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  field="createdTime"
+                  :label="$t('searchTable.form.createdTime')"
+                >
+                  <a-range-picker
+                    v-model="formModel.createdTime"
+                    style="width: 100%"
+                  />
+                </a-form-item>
+              </a-col>
             </a-row>
           </a-form>
         </a-col>
-        <a-divider style="height: 84px" direction="vertical" />
+        <a-divider direction="vertical" />
         <a-col :flex="'86px'" style="text-align: right">
           <a-space direction="vertical" :size="18">
             <a-button type="primary" @click="search">
@@ -68,12 +57,12 @@
               </template>
               {{ $t('searchTable.form.search') }}
             </a-button>
-            <a-button @click="reset">
+            <!-- <a-button @click="reset">
               <template #icon>
                 <icon-refresh />
               </template>
               {{ $t('searchTable.form.reset') }}
-            </a-button>
+            </a-button> -->
           </a-space>
         </a-col>
       </a-row>
@@ -88,25 +77,25 @@
               {{ $t('searchTable.operation.create') }}
             </a-button>
 
-            <a-upload action="/">
+            <!-- <a-upload action="/">
               <template #upload-button>
                 <a-button>
                   {{ $t('searchTable.operation.import') }}
                 </a-button>
               </template>
-            </a-upload>
+            </a-upload> -->
           </a-space>
         </a-col>
         <a-col
           :span="12"
           style="display: flex; align-items: center; justify-content: end"
         >
-          <a-button>
+          <!-- <a-button>
             <template #icon>
               <icon-download />
             </template>
             {{ $t('searchTable.operation.download') }}
-          </a-button>
+          </a-button> -->
           <a-tooltip :content="$t('searchTable.actions.refresh')">
             <div class="action-icon" @click="search"
               ><icon-refresh size="18"
@@ -189,6 +178,25 @@
       </a-table>
     </a-card>
   </div>
+  <template>
+    <a-dialog v-model="showAddTaskDialog" title="新增任务">
+      <a-form>
+        <a-form-item label="TapdID" field="tapdId">
+          <a-input v-model="newTask.tapd" />
+        </a-form-item>
+        <a-form-item label="任务名称" field="taskName">
+          <a-input v-model="newTask.taskName" />
+        </a-form-item>
+        <a-form-item label="来源" field="Source">
+          <a-input v-model="newTask.Source" />
+        </a-form-item>
+        <a-form-item label="状态" field="status">
+          <a-select v-model="newTask.status" :options="statusOptions" />
+        </a-form-item>
+      </a-form>
+      <a-button @click="addTask">确定</a-button>
+    </a-dialog>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -209,8 +217,7 @@
   const generateFormModel = () => {
     return {
       id: '',
-      taskName: '',
-      handler: '',
+      Source: '',
       createdTime: [],
       status: '',
     };
@@ -233,9 +240,7 @@
   });
 
   const newTask = reactive({
-    tapd: '',
-    taskName: '',
-    handler: '',
+    Source: '',
     status: '', // 这里默认为空，你可以设置默认值或者通过下拉框选择
   });
 
@@ -266,26 +271,20 @@
       slotName: 'index',
     },
     {
-      title: t('searchTable.columns.tapdId'),
-      dataIndex: 'tapdId',
+      title: t('searchTable.columns.createdTime'),
+      dataIndex: 'createdTime',
     },
+
     {
-      title: t('searchTable.columns.taskName'),
-      dataIndex: 'taskName',
-    },
-    {
-      title: t('searchTable.columns.handler'),
-      dataIndex: 'handler',
+      title: t('searchTable.columns.source'),
+      dataIndex: 'source',
     },
     {
       title: t('searchTable.columns.status'),
       dataIndex: 'status',
       slotName: 'status',
     },
-    {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
-    },
+
     {
       title: t('searchTable.columns.operations'),
       dataIndex: 'operations',
@@ -295,10 +294,6 @@
   // 定义状态项
   const statusOptions = computed<SelectOptionData[]>(() => [
     {
-      label: t('searchTable.form.status.planning'),
-      value: 'planning',
-    },
-    {
       label: t('searchTable.form.status.progressing'),
       value: 'progressing',
     },
@@ -307,6 +302,7 @@
       value: 'completed',
     },
   ]);
+
   // 进入列表，加载数据
   const fetchData = async (
     params: PolicyParams = { current: 1, pageSize: 10 }
@@ -414,9 +410,7 @@
 
   const addTask = () => {
     const requestData = {
-      tapd: newTask.tapd,
-      taskName: newTask.taskName,
-      handler: newTask.handler,
+      source: newTask.source,
       status: newTask.status,
     };
 
@@ -427,7 +421,7 @@
 
 <script lang="ts">
   export default {
-    name: 'task',
+    name: 'fullstock',
   };
 </script>
 

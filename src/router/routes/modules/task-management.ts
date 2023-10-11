@@ -6,14 +6,14 @@ const TASK: AppRouteRecordRaw = {
   name: 'task',
   component: DEFAULT_LAYOUT,
   meta: {
-    locale: 'menu.task',
+    locale: 'menu.task.management',
     requiresAuth: true,
     icon: 'icon-calendar',
     order: 0,
   },
   children: [
     {
-      path: '/my-task',
+      path: 'my-task',
       name: 'myTask',
       meta: {
         locale: 'menu.task.myTask',

@@ -7,9 +7,6 @@ export default ({ mock, setup }: { mock?: boolean; setup: () => void }) => {
 export const successResponseWrap = (data: unknown) => {
   return {
     data,
-    status: 'ok',
-    msg: '请求成功',
-    code: 20000,
   };
 };
 

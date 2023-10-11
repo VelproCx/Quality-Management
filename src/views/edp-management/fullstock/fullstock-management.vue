@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.task', 'menu.task.myTask']" />
+    <Breadcrumb :items="['menu.edp', 'menu.edp.performance']" />
     <a-card class="general-card" :title="$t('menu.task.searchTable')">
       <a-row>
         <a-col :flex="1">
@@ -13,34 +13,12 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
-                  field="TapdId"
-                  :label="$t('searchTable.form.TapdId')"
-                >
-                  <a-input
-                    v-model="formModel.id"
-                    :placeholder="$t('searchTable.form.TapdId.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="Taskname"
-                  :label="$t('searchTable.form.Taskname')"
+                  field="Source"
+                  :label="$t('searchTable.form.Source')"
                 >
                   <a-input
                     v-model="formModel.taskName"
-                    :placeholder="$t('searchTable.form.Taskname.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="createdTime"
-                  :label="$t('searchTable.form.createdTime')"
-                >
-                  <a-range-picker
-                    v-model="formModel.createdTime"
-                    style="width: 100%"
+                    :placeholder="$t('searchTable.form.Source.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -56,10 +34,21 @@
                   />
                 </a-form-item>
               </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  field="createdTime"
+                  :label="$t('searchTable.form.createdTime')"
+                >
+                  <a-range-picker
+                    v-model="formModel.createdTime"
+                    style="width: 100%"
+                  />
+                </a-form-item>
+              </a-col>
             </a-row>
           </a-form>
         </a-col>
-        <a-divider style="height: 84px" direction="vertical" />
+        <a-divider direction="vertical" />
         <a-col :flex="'86px'" style="text-align: right">
           <a-space direction="vertical" :size="18">
             <a-button type="primary" @click="search">
@@ -68,12 +57,12 @@
               </template>
               {{ $t('searchTable.form.search') }}
             </a-button>
-            <a-button @click="reset">
+            <!-- <a-button @click="reset">
               <template #icon>
                 <icon-refresh />
               </template>
               {{ $t('searchTable.form.reset') }}
-            </a-button>
+            </a-button> -->
           </a-space>
         </a-col>
       </a-row>
@@ -81,32 +70,60 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="12">
           <a-space>
-            <a-button type="primary">
+            <a-button
+              type="primary"
+              html-type="submit"
+              @click="openCreateDialog"
+            >
               <template #icon>
                 <icon-plus />
               </template>
               {{ $t('searchTable.operation.create') }}
             </a-button>
-
-            <a-upload action="/">
-              <template #upload-button>
-                <a-button>
-                  {{ $t('searchTable.operation.import') }}
-                </a-button>
-              </template>
-            </a-upload>
+            <a-modal
+              :visible="showCreateDialog"
+              title="Create Task"
+              @update:visible="showCreateDialog"
+              okText="Confirm"
+              @ok="createTask"
+              cancelText="Cancel"
+              @cancel="handleCancel"
+              @before-ok="handleBeforeOk"
+              @maskClosable="true"
+              width="600px"
+            >
+              <a-form :model="createTaskForm">
+                <a-form-item field="source" label="source">
+                  <a-input
+                    v-model="createTaskForm.source"
+                    placeholder="please enter your username..."
+                  />
+                </a-form-item>
+                <a-form-item
+                  v-for="(command, index) of createTaskForm.commands"
+                  :field="`commands[${index}].value`"
+                  :label="`Command-${index}`"
+                  :key="index"
+                  :rules="[{ required: true, message: 'Command is required' }]"
+                >
+                  <a-textarea v-model="command.value" auto-size />
+                  <a-button
+                    @click="handleDelete(index)"
+                    :style="{ marginLeft: '10px' }"
+                    >Delete</a-button
+                  >
+                </a-form-item>
+              </a-form>
+              <div>
+                <a-button @click="handleAdd">Add Command</a-button>
+              </div>
+            </a-modal>
           </a-space>
         </a-col>
         <a-col
           :span="12"
           style="display: flex; align-items: center; justify-content: end"
         >
-          <a-button>
-            <template #icon>
-              <icon-download />
-            </template>
-            {{ $t('searchTable.operation.download') }}
-          </a-button>
           <a-tooltip :content="$t('searchTable.actions.refresh')">
             <div class="action-icon" @click="search"
               ><icon-refresh size="18"
@@ -137,7 +154,7 @@
               <template #content>
                 <div id="tableSetting">
                   <div
-                    v-for="(item, index) in showColumns"
+                    v-for="item in showColumns"
                     :key="item.dataIndex"
                     class="setting"
                   >
@@ -154,7 +171,7 @@
                       </a-checkbox>
                     </div>
                     <div class="title">
-                      {{ item.title === '#' ? '序列号' : item.title }}
+                      {{ item.title === '#' ? ' 编号' : item.title }}
                     </div>
                   </div>
                 </div>
@@ -177,13 +194,20 @@
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
         <template #status="{ record }">
-          <span v-if="record.status === 'Planning'" class="circle"></span>
-          <span v-else class="circle pass"></span>
+          <span v-if="record.status === 'completed'" class="circle"></span>
+          <span
+            v-if="record.status === 'progressing'"
+            class="circle pass"
+          ></span>
+          <span v-if="record.status === 'error'" class="circle err"></span>
           {{ $t(`searchTable.form.status.${record.status}`) }}
         </template>
         <template #operations>
           <a-button v-permission="['admin']" type="text" size="small">
             {{ $t('searchTable.columns.operations.view') }}
+          </a-button>
+          <a-button v-permission="['admin']" type="text" size="small">
+            {{ $t('searchTable.columns.operations.download') }}
           </a-button>
         </template>
       </a-table>
@@ -200,17 +224,20 @@
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
   import { Pagination } from '@/types/global';
-  import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/task';
-  //   import { Message } from 'arco-ui';
+  import {
+    queryPolicyList,
+    PolicyRecord,
+    PolicyParams,
+    CreateEdpPerformancePar,
+  } from '@/api/performance';
+  import { Message } from '@arco-design/web-vue';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
 
   const generateFormModel = () => {
     return {
-      id: '',
-      taskName: '',
-      handler: '',
+      source: '',
       createdTime: [],
       status: '',
     };
@@ -222,23 +249,22 @@
   const cloneColumns = ref<Column[]>([]);
   const showColumns = ref<Column[]>([]);
   const size = ref<SizeProps>('medium');
-  const showAddTaskDialog = ref(false);
+  const showCreateDialog = ref(false);
+  const Shell: (string | number)[] = [];
   const basePagination: Pagination = {
     current: 1,
-    pageSize: 50,
+    pageSize: 10,
   };
 
   const pagination = reactive({
     ...basePagination,
   });
 
-  const newTask = reactive({
-    tapd: '',
-    taskName: '',
-    handler: '',
-    status: '', // 这里默认为空，你可以设置默认值或者通过下拉框选择
+  //   新建执行任务参数
+  const createTaskForm = reactive({
+    source: 'Admin',
+    commands: [{ value: '' }],
   });
-
   // 定义列表显示密度选项
   const densityList = computed(() => [
     {
@@ -266,26 +292,20 @@
       slotName: 'index',
     },
     {
-      title: t('searchTable.columns.tapdId'),
-      dataIndex: 'tapdId',
+      title: t('searchTable.columns.createdTime'),
+      dataIndex: 'createdTime',
     },
+
     {
-      title: t('searchTable.columns.taskName'),
-      dataIndex: 'taskName',
-    },
-    {
-      title: t('searchTable.columns.handler'),
-      dataIndex: 'handler',
+      title: t('searchTable.columns.source'),
+      dataIndex: 'source',
     },
     {
       title: t('searchTable.columns.status'),
       dataIndex: 'status',
       slotName: 'status',
     },
-    {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
-    },
+
     {
       title: t('searchTable.columns.operations'),
       dataIndex: 'operations',
@@ -295,10 +315,6 @@
   // 定义状态项
   const statusOptions = computed<SelectOptionData[]>(() => [
     {
-      label: t('searchTable.form.status.planning'),
-      value: 'planning',
-    },
-    {
       label: t('searchTable.form.status.progressing'),
       value: 'progressing',
     },
@@ -306,7 +322,53 @@
       label: t('searchTable.form.status.completed'),
       value: 'completed',
     },
+    {
+      label: t('searchTable.form.status.error'),
+      value: 'error',
+    },
   ]);
+  const handleAdd = () => {
+    createTaskForm.commands.push({
+      value: '',
+    });
+  };
+  const handleDelete = (index: number) => {
+    createTaskForm.commands.splice(index, 1);
+  };
+
+  const openCreateDialog = () => {
+    showCreateDialog.value = true;
+  };
+
+  const handleCancel = () => {
+    createTaskForm.commands = [];
+    showCreateDialog.value = false;
+  };
+
+  const handleBeforeOk = (done: any) => {
+    window.setTimeout(() => {
+      done();
+    }, 1000);
+  };
+
+  const createTask = async () => {
+    setLoading(true);
+    try {
+      console.log(createTaskForm);
+      const response = await CreateEdpPerformancePar(createTaskForm);
+      const responseData = response.data;
+      fetchData();
+    } catch (error) {
+      // 处理错误，例如显示错误消息或记录错误日志
+      Message.error('Error creating new task:');
+    } finally {
+      Message.success('创建成功 !');
+      createTaskForm.commands = [];
+      showCreateDialog.value = false;
+      setLoading(false);
+    }
+  };
+
   // 进入列表，加载数据
   const fetchData = async (
     params: PolicyParams = { current: 1, pageSize: 10 }
@@ -316,19 +378,18 @@
       const { data } = await queryPolicyList(params);
       //   加载数据
       renderData.value = data;
-      //   console.log(data);
       //   当前页码
       pagination.current = params.current;
       //   当前总数
       pagination.total = data.total;
     } catch (err) {
-      // you can report use errorHandler or other
       //   Message.error('请求失败，请稍后重试');
-      console.error(err);
+      Message.error('Error creating new task:');
     } finally {
       setLoading(false);
     }
   };
+
   // 带查询条件进行数据查询
   const search = () => {
     fetchData({
@@ -342,9 +403,9 @@
   };
 
   fetchData();
-  const reset = () => {
-    formModel.value = generateFormModel();
-  };
+  //   const reset = () => {
+  //     formModel.value = generateFormModel();
+  //   };
   // 选择显示列表密度
   const handleSelectDensity = (
     val: string | number | Record<string, any> | undefined,
@@ -403,6 +464,7 @@
   watch(
     () => columns.value,
     (val) => {
+      fetchData();
       cloneColumns.value = cloneDeep(val);
       cloneColumns.value.forEach((item, index) => {
         item.checked = true;
@@ -411,23 +473,11 @@
     },
     { deep: true, immediate: true }
   );
-
-  const addTask = () => {
-    const requestData = {
-      tapd: newTask.tapd,
-      taskName: newTask.taskName,
-      handler: newTask.handler,
-      status: newTask.status,
-    };
-
-    // 关闭弹出框
-    showAddTaskDialog.value = false;
-  };
 </script>
 
 <script lang="ts">
   export default {
-    name: 'task',
+    name: 'performance',
   };
 </script>
 
@@ -458,5 +508,8 @@
       margin-left: 12px;
       cursor: pointer;
     }
+  }
+  .arco-modal {
+    width: 600px;
   }
 </style>

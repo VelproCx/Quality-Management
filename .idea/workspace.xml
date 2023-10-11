@@ -4,27 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a49e4aa-4472-44f9-bb8c-5665238cbdf2" name="Changes" comment="add task management">
-      <change beforePath="$PROJECT_DIR$/.husky/commit-msg" beforeDir="false" afterPath="$PROJECT_DIR$/.husky/commit-msg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    <list default="true" id="4a49e4aa-4472-44f9-bb8c-5665238cbdf2" name="Changes" comment="add edp management">
+      <change afterPath="$PROJECT_DIR$/src/api/performance.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/regression.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/rolx.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/routes/modules/edp-management.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/routes/modules/rolx-management.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/fullstock/fullstock-management.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/fullstock/locale/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/fullstock/locale/zh-CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/performance/locale/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/performance/locale/zh-CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/performance/performance-management.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/regression/locale/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/regression/locale/zh-CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/edp-management/regression/regression-management.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/fullstock/fullstock-management.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/fullstock/locale/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/fullstock/locale/zh-CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/performance/locale/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/performance/locale/zh-CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/performance/performance-management.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/regression/locale/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/regression/locale/zh-CN.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/rolx-management/regression/regression-management.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/interceptor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/images/login-banner.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/footer/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/footer/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/navbar/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/navbar/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/style/global.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/style/global.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/locale/en-US.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/locale/en-US.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/locale/zh-CN.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/locale/zh-CN.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mock/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mock/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/routes/externalModules/arco.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/externalModules/arco.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/routes/externalModules/faq.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/externalModules/faq.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/routes/modules/dashboard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/modules/dashboard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/components/login-form.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/components/login-form.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/locale/en-US.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/locale/en-US.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/login/locale/zh-CN.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/login/locale/zh-CN.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/test-task/my-task/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/test-task/my-task/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/routes/modules/test-task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/modules/task-management.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/setup-mock.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/setup-mock.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/task-management/my-task/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/task-management/my-task/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/task-management/my-task/locale/en-US.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/task-management/my-task/locale/en-US.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +83,7 @@
       <workItem from="1694702658122" duration="16000" />
       <workItem from="1695116514642" duration="122000" />
       <workItem from="1695118649144" duration="55000" />
+      <workItem from="1697018529759" duration="38000" />
     </task>
     <servers />
   </component>
@@ -101,6 +115,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add task management" />
-    <option name="LAST_COMMIT_MESSAGE" value="add task management" />
+    <MESSAGE value="add edp management" />
+    <option name="LAST_COMMIT_MESSAGE" value="add edp management" />
   </component>
 </project>

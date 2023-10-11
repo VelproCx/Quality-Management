@@ -1,13 +1,11 @@
 export default {
-  'menu.task.myTask': 'Back Log',
+  'menu.edp.management': 'EDP Management',
+
+  'menu.edp.fullstock': 'Full Stock',
+
   'menu.task.searchTable': 'Search Table',
 
   'searchTable.form.TapdId': 'Tapd Id',
-  'searchTable.form.TapdId.placeholder': 'Please enter TAPD ID',
-
-  'searchTable.form.Taskname': 'Task Name',
-  'searchTable.form.Taskname.placeholder': 'Please enter Task Name',
-
   'searchTable.form.createdTime': 'Created Time',
 
   'searchTable.form.status': 'status',

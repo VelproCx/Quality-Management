@@ -2,6 +2,13 @@ import localeMessageBox from '@/components/message-box/locale/en-US';
 import localeLogin from '@/views/login/locale/en-US';
 import localeTask from '@/views/task-management/my-task/locale/en-US';
 import localeWorkplace from '@/views/dashboard/workplace/locale/en-US';
+import localEdpRegression from '@/views/edp-management/regression/locale/en-US';
+import localEdpPerformance from '@/views/edp-management/performance/locale/en-US';
+import localEdpFullstock from '@/views/edp-management/fullstock/locale/en-US';
+
+import localRolxRegression from '@/views/rolx-management/regression/locale/en-US';
+import localRolxPerformance from '@/views/rolx-management/performance/locale/en-US';
+import localRolxFullstock from '@/views/rolx-management/fullstock/locale/en-US';
 
 import localeSettings from './en-US/settings';
 
@@ -12,7 +19,7 @@ export default {
   'menu.server.monitor': 'Monitor-Server',
   'menu.list': 'List',
   'menu.result': 'Result',
-  'menu.task': 'Test Task',
+  'menu.task.management': 'Task Management',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
   'menu.profile': 'Profile',
@@ -20,6 +27,7 @@ export default {
   'menu.user': 'User Center',
   'menu.arcoWebsite': 'Arco Design',
   'menu.faq': 'FAQ',
+  'menu.edp': 'EDP',
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
   //   'menu.task.myTask': 'My Task',
@@ -28,4 +36,10 @@ export default {
   ...localeLogin,
   ...localeWorkplace,
   ...localeTask,
+  ...localEdpRegression,
+  ...localEdpPerformance,
+  ...localEdpFullstock,
+  ...localRolxRegression,
+  ...localRolxPerformance,
+  ...localRolxFullstock,
 };

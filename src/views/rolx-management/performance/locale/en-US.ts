@@ -1,5 +1,8 @@
 export default {
-  'menu.task.myTask': 'Back Log',
+  'menu.rolx.management': 'Rolx Management',
+
+  'menu.rolx.performance': 'Performance',
+
   'menu.task.searchTable': 'Search Table',
 
   'searchTable.form.TapdId': 'Tapd Id',

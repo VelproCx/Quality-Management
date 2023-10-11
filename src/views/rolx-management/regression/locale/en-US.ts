@@ -1,17 +1,17 @@
 export default {
-  'menu.task.myTask': 'Back Log',
+  'menu.rolx.management': 'Rolx Management',
+  'menu.rolx.regression': 'Regression',
+
+  'menu.rolx.performance': 'Performance Management',
+
   'menu.task.searchTable': 'Search Table',
 
-  'searchTable.form.TapdId': 'Tapd Id',
-  'searchTable.form.TapdId.placeholder': 'Please enter TAPD ID',
-
-  'searchTable.form.Taskname': 'Task Name',
-  'searchTable.form.Taskname.placeholder': 'Please enter Task Name',
+  'searchTable.form.Source': 'Source',
+  'searchTable.form.Source.placeholder': 'Please enter source',
 
   'searchTable.form.createdTime': 'Created Time',
 
   'searchTable.form.status': 'status',
-  'searchTable.form.status.planning': 'planning',
   'searchTable.form.status.progressing': 'progressing',
   'searchTable.form.status.completed': 'completed',
   'searchTable.form.selectDefault': 'Please select status',
@@ -20,7 +20,6 @@ export default {
   'searchTable.form.reset': 'Reset',
 
   'searchTable.operation.create': 'Create',
-  'searchTable.operation.import': 'Import',
 
   'searchTable.operation.download': 'Download',
   'searchTable.actions.refresh': 'Refresh',
@@ -36,8 +35,6 @@ export default {
   'searchTable.columns.operations.view': 'View',
   // columns
   'searchTable.columns.index': '#',
-  'searchTable.columns.tapdId': 'Tapd Id',
-  'searchTable.columns.taskName': 'Task Name',
   'searchTable.columns.handler': 'Handler',
   'searchTable.columns.createdTime': 'CreatedTime',
   'searchTable.columns.status': 'Status',

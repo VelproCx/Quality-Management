@@ -1,19 +1,16 @@
 export default {
-  'menu.task.myTask': 'Back Log',
+  'menu.edp.management': 'EDP Management',
+
+  'menu.edp.performance': 'Performance',
+
   'menu.task.searchTable': 'Search Table',
-
-  'searchTable.form.TapdId': 'Tapd Id',
-  'searchTable.form.TapdId.placeholder': 'Please enter TAPD ID',
-
-  'searchTable.form.Taskname': 'Task Name',
-  'searchTable.form.Taskname.placeholder': 'Please enter Task Name',
 
   'searchTable.form.createdTime': 'Created Time',
 
   'searchTable.form.status': 'status',
-  'searchTable.form.status.planning': 'planning',
-  'searchTable.form.status.progressing': 'progressing',
-  'searchTable.form.status.completed': 'completed',
+  'searchTable.form.status.progressing': 'Progressing',
+  'searchTable.form.status.completed': 'Completed',
+  'searchTable.form.status.error': 'Error',
   'searchTable.form.selectDefault': 'Please select status',
 
   'searchTable.form.search': 'Search',
@@ -36,9 +33,10 @@ export default {
   'searchTable.columns.operations.view': 'View',
   // columns
   'searchTable.columns.index': '#',
-  'searchTable.columns.tapdId': 'Tapd Id',
-  'searchTable.columns.taskName': 'Task Name',
   'searchTable.columns.handler': 'Handler',
   'searchTable.columns.createdTime': 'CreatedTime',
   'searchTable.columns.status': 'Status',
+
+  'createTask.form.status.success': 'Create Success !',
+  'createTask.form.status.fail': 'Create Failed !',
 };
