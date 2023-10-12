@@ -39,10 +39,7 @@
                   field="createdTime"
                   :label="$t('searchTable.form.createdTime')"
                 >
-                  <a-range-picker
-                    v-model="formModel.createdTime"
-                    style="width: 100%"
-                  />
+                  <a-range-picker @change="onChange" @select="onSelect" />
                 </a-form-item>
               </a-col>
             </a-row>
@@ -240,7 +237,9 @@
   const generateFormModel = () => {
     return {
       source: '',
-      createdTime: [],
+      startTime: '',
+      endTime: '',
+      //   createdTime: [],
       status: '',
       taskId: '',
     };
@@ -397,6 +396,18 @@
     } finally {
       setLoading(false);
     }
+  };
+
+  const onSelect = (dateString: string, date: Date) => {
+    // console.log('onSelect', dateString, date);
+  };
+  const onChange = (
+    [start, end]: [string, string],
+    [startDate, endDate]: [Date, Date]
+  ) => {
+    formModel.value.startTime = start;
+    formModel.value.endTime = end;
+    console.log('onChange: ', start);
   };
 
   // 带查询条件进行数据查询
