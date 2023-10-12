@@ -13,6 +13,17 @@ const EDPMANAGEMENT: AppRouteRecordRaw = {
   },
   children: [
     {
+      path: 'edp-smoke',
+      name: 'edp-smoke',
+      component: () =>
+        import('@/views/edp-management/smoke/smoke-management.vue'),
+      meta: {
+        locale: 'menu.edp.smoke',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
+    {
       path: 'edp-regression',
       name: 'edp-regression',
       component: () =>

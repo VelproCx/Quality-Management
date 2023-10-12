@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.edp', 'menu.edp.performance']" />
+    <Breadcrumb :items="['menu.edp', 'menu.edp.smoke']" />
     <a-card class="general-card" :title="$t('menu.task.searchTable')">
       <a-row>
         <a-col :flex="1">
@@ -13,12 +13,23 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
-                  field="Source"
-                  :label="$t('searchTable.form.Source')"
+                  field="taskId"
+                  :label="$t('searchTable.form.taskId')"
+                >
+                  <a-input
+                    v-model="formModel.taskId"
+                    :placeholder="$t('searchTable.form.taskId.placeholder')"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  field="source"
+                  :label="$t('searchTable.form.source')"
                 >
                   <a-input
                     v-model="formModel.source"
-                    :placeholder="$t('searchTable.form.Source.placeholder')"
+                    :placeholder="$t('searchTable.form.source.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -83,40 +94,208 @@
             <a-modal
               :visible="showCreateDialog"
               title="Create Task"
-              @update:visible="showCreateDialog"
               okText="Confirm"
-              @ok="createTask"
               cancelText="Cancel"
+              @update:visible="showCreateDialog"
+              @ok="createTask"
               @cancel="handleCancel"
               @before-ok="handleBeforeOk"
               maskClosable="false"
-              width="600px"
+              width="1550px"
             >
               <a-form :model="createTaskForm">
-                <a-form-item field="source" label="source">
+                <!-- <a-form-item field="source" label="source" disabled>
                   <a-input
                     v-model="createTaskForm.source"
-                    placeholder="please enter your username..."
+                    placeholder="please enter username"
                   />
-                </a-form-item>
-                <a-form-item
-                  v-for="(command, index) of createTaskForm.commands"
-                  :field="`commands[${index}].value`"
-                  :label="`Command-${index}`"
-                  :key="index"
-                  :rules="[{ required: true, message: 'Command is required' }]"
-                >
-                  <a-textarea v-model="command.value" auto-size />
-                  <a-button
-                    @click="handleDelete(index)"
-                    :style="{ marginLeft: '10px' }"
-                    >Delete</a-button
-                  >
-                </a-form-item>
+                </a-form-item> -->
+                <a-row :gutter="16">
+                  <!-- <a-divider /> -->
+                  <a-col :span="12">
+                    <a-form-item field="ip" label="IP">
+                      <a-input
+                        v-model="createTaskForm.ip"
+                        placeholder="please enter ip"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="port" label="Port">
+                      <a-input
+                        v-model="createTaskForm.port"
+                        placeholder="please enter port"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="sender" label="Sender">
+                      <a-select
+                        v-model="createTaskForm.sender"
+                        :options="senderOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="target" label="Target">
+                      <a-select
+                        v-model="createTaskForm.target"
+                        :options="targetOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <!-- <span>Order Info</span> -->
+                  <a-divider />
+                  <a-col :span="12">
+                    <a-form-item field="account" label="Account">
+                      <a-select
+                        v-model="createTaskForm.account"
+                        :options="accountOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="market" label="Market" disabled>
+                      <a-input
+                        v-model="createTaskForm.market"
+                        placeholder="please enter market"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="actionType" label="ActionType">
+                      <a-select
+                        v-model="createTaskForm.actionType"
+                        :options="actionTypeOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+
+                  <a-col :span="12">
+                    <a-form-item field="orderQty" label="OrderQty">
+                      <a-input
+                        v-model="createTaskForm.orderQty"
+                        placeholder="please enter orderQty"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="ordType" label="OrdType">
+                      <a-select
+                        v-model="createTaskForm.ordType"
+                        :options="ordTypeOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12" v-if="createTaskForm.ordType === '2'">
+                    <a-form-item field="price" label="Price">
+                      <a-input
+                        v-model="createTaskForm.price"
+                        placeholder="please enter price"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="side" label="Side">
+                      <a-select
+                        v-model="createTaskForm.side"
+                        :options="sideOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="symbol" label="Symbol">
+                      <a-input
+                        v-model="createTaskForm.symbol"
+                        placeholder="please enter symbol"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="timeInForce" label="TimeInForce">
+                      <a-select
+                        v-model="createTaskForm.timeInForce"
+                        :options="timeInForceOptions"
+                        :placeholder="$t('createTable.form.selectDefault')"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item
+                      field="crossingPriceType"
+                      label="CrossingPriceType"
+                    >
+                      <a-input
+                        v-model="createTaskForm.crossingPriceType"
+                        placeholder="please enter crossingPriceType"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="rule80A" label="Rule80A">
+                      <a-input
+                        v-model="createTaskForm.rule80A"
+                        placeholder="please enter rule80A"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="cashMargin" label="CashMargin">
+                      <a-input
+                        v-model="createTaskForm.cashMargin"
+                        placeholder="please enter cashMargin"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item
+                      field="marginTransactionType"
+                      label="marginTransactionType"
+                    >
+                      <a-input
+                        v-model="createTaskForm.marginTransactionType"
+                        placeholder="please enter MarginTransactionType"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item field="minQty" label="MinQty">
+                      <a-input
+                        v-model="createTaskForm.minQty"
+                        placeholder="please enter minQty"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item
+                      field="orderClassification"
+                      label="OrderClassification"
+                    >
+                      <a-input
+                        v-model="createTaskForm.orderClassification"
+                        placeholder="please enter orderClassification"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-form-item
+                      field="selfTradePreventionId"
+                      label="SelfTradePreventionId"
+                    >
+                      <a-input
+                        v-model="createTaskForm.selfTradePreventionId"
+                        placeholder="please enter selfTradePreventionId"
+                      />
+                    </a-form-item>
+                  </a-col>
+                </a-row>
               </a-form>
-              <div>
-                <a-button @click="handleAdd">Add Command</a-button>
-              </div>
             </a-modal>
           </a-space>
         </a-col>
@@ -230,8 +409,8 @@
     queryPolicyList,
     PolicyRecord,
     PolicyParams,
-    CreateEdpPerformancePar,
-  } from '@/api/performance';
+    CreateEdpSmokePar,
+  } from '@/api/smoke';
   import { Message } from '@arco-design/web-vue';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
@@ -239,10 +418,30 @@
 
   const generateFormModel = () => {
     return {
+      ip: '',
+      port: '',
+      sender: '',
+      target: '',
+      account: '',
+      market: 'EDP',
+      actionType: '',
+      orderQty: null,
+      ordType: '',
+      side: '',
+      symbol: '',
+      timeInForce: '',
+      crossingPriceType: 'EDP',
+      rule80A: '',
+      cashMargin: '',
+      marginTransactionType: '',
+      minQty: null,
+      orderClassification: '',
+      selfTradePreventionId: '',
       source: '',
       createdTime: [],
       status: '',
       taskId: '',
+      price: '',
     };
   };
   const { loading, setLoading } = useLoading(true);
@@ -266,7 +465,26 @@
   //   新建执行任务参数
   const createTaskForm = reactive({
     source: 'Admin',
-    commands: [{ value: '' }],
+    ip: '',
+    port: '',
+    sender: '',
+    target: '',
+    account: '',
+    market: '' || 'EDP',
+    actionType: '',
+    orderQty: null,
+    ordType: '',
+    side: '',
+    symbol: '',
+    timeInForce: '',
+    crossingPriceType: '' || 'EDP',
+    rule80A: '',
+    cashMargin: '',
+    marginTransactionType: '',
+    minQty: null,
+    orderClassification: '',
+    selfTradePreventionId: '',
+    price: '',
   });
   // 定义列表显示密度选项
   const densityList = computed(() => [
@@ -300,18 +518,32 @@
       slotName: 'taskId',
     },
     {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
+      title: t('searchTable.columns.symbol'),
+      dataIndex: 'symbol',
+      slotName: 'symbol',
     },
-
     {
-      title: t('searchTable.columns.source'),
-      dataIndex: 'source',
+      title: t('searchTable.columns.ordType'),
+      dataIndex: 'ordType',
+      slotName: 'ordType',
+    },
+    {
+      title: t('searchTable.columns.side'),
+      dataIndex: 'side',
+      slotName: 'side',
     },
     {
       title: t('searchTable.columns.status'),
       dataIndex: 'status',
       slotName: 'status',
+    },
+    {
+      title: t('searchTable.columns.source'),
+      dataIndex: 'source',
+    },
+    {
+      title: t('searchTable.columns.createdTime'),
+      dataIndex: 'createdTime',
     },
 
     {
@@ -335,21 +567,125 @@
       value: 'error',
     },
   ]);
-  const handleAdd = () => {
-    createTaskForm.commands.push({
-      value: '',
-    });
-  };
-  const handleDelete = (index: number) => {
-    createTaskForm.commands.splice(index, 1);
-  };
+  //   定义account下拉框项
+  const accountOptions = computed<SelectOptionData[]>(() => {
+    const options = [];
+    for (let i = 1; i <= 10; i += 1) {
+      options.push({
+        label: `RSIT_EDP_ACCOUNT_${i}`,
+        value: `RSIT_EDP_ACCOUNT_${i}`,
+      });
+    }
+    // for (let i = 1; i <= 10; i += 1) {
+    //   options.push({
+    //     label: `RSIT_ACCOUNT_${i}`,
+    //     value: `RSIT_ACCOUNT_${i}`,
+    //   });
+    // }
+    for (let i = 1; i <= 10; i += 1) {
+      options.push({
+        label: `RUAT_EDP_ACCOUNT_${i}`,
+        value: `RUAT_EDP_ACCOUNT_${i}`,
+      });
+    }
+    // for (let i = 1; i <= 10; i += 1) {
+    //   options.push({
+    //     label: `RUAT_ACCOUNT_${i}`,
+    //     value: `RUAT_ACCOUNT_${i}`,
+    //   });
+    // }
+    return options;
+  });
+
+  const senderOptions = computed<SelectOptionData[]>(() => {
+    const options = [];
+    for (let i = 1; i <= 10; i += 1) {
+      options.push({
+        label: `RSIT_EDP_${i}`,
+        value: `RSIT_EDP_${i}`,
+      });
+    }
+    // for (let i = 1; i <= 10; i += 1) {
+    //   options.push({
+    //     label: `RSIT_ACCOUNT_${i}`,
+    //     value: `RSIT_ACCOUNT_${i}`,
+    //   });
+    // }
+    for (let i = 1; i <= 10; i += 1) {
+      options.push({
+        label: `RUAT_EDP_${i}`,
+        value: `RUAT_EDP_${i}`,
+      });
+    }
+    // for (let i = 1; i <= 10; i += 1) {
+    //   options.push({
+    //     label: `RUAT_ACCOUNT_${i}`,
+    //     value: `RUAT_ACCOUNT_${i}`,
+    //   });
+    // }
+    return options;
+  });
+
+  const targetOptions = computed<SelectOptionData[]>(() => [
+    {
+      label: t('createTable.form.target.sit'),
+      value: 'FSX_SIT_EDP',
+    },
+    {
+      label: t('createTable.form.target.uat'),
+      value: 'FSX_UAT_EDP',
+    },
+  ]);
+
+  const actionTypeOptions = computed<SelectOptionData[]>(() => [
+    {
+      label: t('createTable.form.actionType.new'),
+      value: 'NewAck',
+    },
+    {
+      label: t('createTable.form.actionType.cancel'),
+      value: 'CancelAck',
+    },
+  ]);
+
+  const ordTypeOptions = computed<SelectOptionData[]>(() => [
+    {
+      label: t('createTable.form.ordType.market'),
+      value: '1',
+    },
+    {
+      label: t('createTable.form.ordType.limit'),
+      value: '2',
+    },
+  ]);
+
+  const sideOptions = computed<SelectOptionData[]>(() => [
+    {
+      label: t('createTable.form.side.buy'),
+      value: '1',
+    },
+    {
+      label: t('createTable.form.side.sell'),
+      value: '2',
+    },
+  ]);
+
+  const timeInForceOptions = computed<SelectOptionData[]>(() => [
+    {
+      label: t('createTable.form.timeInForce.day'),
+      value: '0',
+    },
+    {
+      label: t('createTable.form.timeInForce.ioc'),
+      value: '3',
+    },
+  ]);
 
   const openCreateDialog = () => {
     showCreateDialog.value = true;
   };
 
   const handleCancel = () => {
-    createTaskForm.commands = [];
     showCreateDialog.value = false;
   };
 
@@ -362,8 +698,7 @@
   const createTask = async () => {
     setLoading(true);
     try {
-      console.log(createTaskForm);
-      const response = await CreateEdpPerformancePar(createTaskForm);
+      const response = await CreateEdpSmokePar(createTaskForm);
       const responseData = response.data;
       fetchData();
     } catch (error) {
@@ -371,7 +706,6 @@
       Message.error(t('createTask.form.status.fail'));
     } finally {
       Message.success(t('createTask.form.status.success'));
-      createTaskForm.commands = [];
       showCreateDialog.value = false;
       setLoading(false);
     }
@@ -486,7 +820,7 @@
 
 <script lang="ts">
   export default {
-    name: 'performance',
+    name: 'smoke',
   };
 </script>
 
@@ -519,6 +853,6 @@
     }
   }
   .arco-modal {
-    width: 600px;
+    width: 800px;
   }
 </style>

@@ -2,7 +2,7 @@ export default {
   'menu.rolx.management': 'Rolx Management',
   'menu.rolx.regression': 'Regression',
 
-  'menu.rolx.performance': 'Performance Management',
+  'menu.rolx.performance': 'Performance',
 
   'menu.task.searchTable': 'Search Table',
 

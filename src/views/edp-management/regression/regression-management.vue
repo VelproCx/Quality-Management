@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.edp', 'menu.edp.performance']" />
+    <Breadcrumb :items="['menu.edp', 'menu.edp.regression']" />
     <a-card class="general-card" :title="$t('menu.task.searchTable')">
       <a-row>
         <a-col :flex="1">
@@ -17,7 +17,7 @@
                   :label="$t('searchTable.form.Source')"
                 >
                   <a-input
-                    v-model="formModel.taskName"
+                    v-model="formModel.source"
                     :placeholder="$t('searchTable.form.Source.placeholder')"
                   />
                 </a-form-item>
@@ -89,7 +89,7 @@
               cancelText="Cancel"
               @cancel="handleCancel"
               @before-ok="handleBeforeOk"
-              @maskClosable="true"
+              maskClosable="false"
               width="600px"
             >
               <a-form :model="createTaskForm">
@@ -201,12 +201,16 @@
           ></span>
           <span v-if="record.status === 'error'" class="circle err"></span>
           {{ $t(`searchTable.form.status.${record.status}`) }}
+          <span v-if="record.status === 'error'" class="circle err"></span>
+          <icon-exclamation-circle
+            :style="{ fontSize: '24px', color: 'red' }"
+          />
         </template>
         <template #operations>
-          <a-button v-permission="['admin']" type="text" size="small">
+          <a-button type="text" size="small">
             {{ $t('searchTable.columns.operations.view') }}
           </a-button>
-          <a-button v-permission="['admin']" type="text" size="small">
+          <a-button type="text" size="small">
             {{ $t('searchTable.columns.operations.download') }}
           </a-button>
         </template>
@@ -224,12 +228,13 @@
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
   import { Pagination } from '@/types/global';
+  import { IconExclamationCircle } from '@arco-design/web-vue/es/icon';
   import {
     queryPolicyList,
     PolicyRecord,
     PolicyParams,
-    CreateEdpPerformancePar,
-  } from '@/api/performance';
+    CreateEdpRegressionPar,
+  } from '@/api/regression';
   import { Message } from '@arco-design/web-vue';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
@@ -240,6 +245,7 @@
       source: '',
       createdTime: [],
       status: '',
+      taskId: '',
     };
   };
   const { loading, setLoading } = useLoading(true);
@@ -290,6 +296,11 @@
       title: t('searchTable.columns.index'),
       dataIndex: 'index',
       slotName: 'index',
+    },
+    {
+      title: t('searchTable.columns.taskId'),
+      dataIndex: 'taskId',
+      slotName: 'taskId',
     },
     {
       title: t('searchTable.columns.createdTime'),
@@ -355,12 +366,12 @@
     setLoading(true);
     try {
       console.log(createTaskForm);
-      const response = await CreateEdpPerformancePar(createTaskForm);
+      const response = await CreateEdpRegressionPar(createTaskForm);
       const responseData = response.data;
       fetchData();
     } catch (error) {
       // 处理错误，例如显示错误消息或记录错误日志
-      Message.error('Error creating new task:');
+      Message.error(t('createTask.form.status.fail'));
     } finally {
       Message.success(t('createTask.form.status.success'));
       createTaskForm.commands = [];
@@ -376,15 +387,16 @@
     setLoading(true);
     try {
       const { data } = await queryPolicyList(params);
+      console.log(data.data);
       //   加载数据
-      renderData.value = data;
+      renderData.value = data.data;
       //   当前页码
       pagination.current = params.current;
       //   当前总数
-      pagination.total = data.total;
+      pagination.total = data.data.length;
     } catch (err) {
       //   Message.error('请求失败，请稍后重试');
-      Message.error('Error creating new task:');
+      Message.error('Loading Error');
     } finally {
       setLoading(false);
     }
@@ -477,7 +489,7 @@
 
 <script lang="ts">
   export default {
-    name: 'performance',
+    name: 'regression',
   };
 </script>
 

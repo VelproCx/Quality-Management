@@ -5,7 +5,7 @@ import localeWorkplace from '@/views/dashboard/workplace/locale/en-US';
 import localEdpRegression from '@/views/edp-management/regression/locale/en-US';
 import localEdpPerformance from '@/views/edp-management/performance/locale/en-US';
 import localEdpFullstock from '@/views/edp-management/fullstock/locale/en-US';
-
+import localEdpSmoke from '@/views/edp-management/smoke/locale/en-US';
 import localRolxRegression from '@/views/rolx-management/regression/locale/en-US';
 import localRolxPerformance from '@/views/rolx-management/performance/locale/en-US';
 import localRolxFullstock from '@/views/rolx-management/fullstock/locale/en-US';
@@ -30,12 +30,12 @@ export default {
   'menu.edp': 'EDP',
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
-  //   'menu.task.myTask': 'My Task',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
   ...localeWorkplace,
   ...localeTask,
+  ...localEdpSmoke,
   ...localEdpRegression,
   ...localEdpPerformance,
   ...localEdpFullstock,

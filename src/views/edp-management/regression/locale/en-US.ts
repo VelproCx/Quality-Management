@@ -2,7 +2,7 @@ export default {
   'menu.edp.management': 'EDP Management',
   'menu.edp.regression': 'Regression',
 
-  'menu.edp.performance': 'Performance Management',
+  'menu.edp.performance': 'Performanc',
 
   'menu.task.searchTable': 'Search Table',
 

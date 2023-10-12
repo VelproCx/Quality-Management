@@ -89,7 +89,7 @@
               cancelText="Cancel"
               @cancel="handleCancel"
               @before-ok="handleBeforeOk"
-              @maskClosable="true"
+              maskClosable="false"
               width="600px"
             >
               <a-form :model="createTaskForm">
