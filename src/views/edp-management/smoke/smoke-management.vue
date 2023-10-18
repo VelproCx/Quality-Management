@@ -94,14 +94,14 @@
             <a-modal
               :visible="showCreateDialog"
               title="Create Task"
-              okText="Confirm"
-              cancelText="Cancel"
+              ok-text="Confirm"
+              width="1550px"
+              mask-closable="false"
+              @cancel-text="Cancel"
               @update:visible="showCreateDialog"
               @ok="createTask"
               @cancel="handleCancel"
               @before-ok="handleBeforeOk"
-              maskClosable="false"
-              width="1550px"
             >
               <a-form :model="createTaskForm">
                 <!-- <a-form-item field="source" label="source" disabled>
@@ -192,7 +192,7 @@
                       />
                     </a-form-item>
                   </a-col>
-                  <a-col :span="12" v-if="createTaskForm.ordType === '2'">
+                  <a-col v-if="createTaskForm.ordType === '2'" :span="12">
                     <a-form-item field="price" label="Price">
                       <a-input
                         v-model="createTaskForm.price"
@@ -382,17 +382,43 @@
           {{ $t(`searchTable.form.status.${record.status}`) }}
           <icon-exclamation-circle v-if="record.status === 'error'" />
         </template>
-        <template #operations>
-          <a-button type="text" size="small">
+        <template #operations="{ record }">
+          <a-button type="text" size="small" @click="openViewDialog(record)">
             {{ $t('searchTable.columns.operations.view') }}
           </a-button>
-          <a-button type="text" size="small">
+
+          <a-button type="text" size="small" @click="downloadData(record)">
             {{ $t('searchTable.columns.operations.download') }}
           </a-button>
         </template>
       </a-table>
     </a-card>
   </div>
+  <a-modal
+    :visible="showViewDialog"
+    title="Task Details"
+    mask-closable="false"
+    ok-text="Close"
+    hide-cancel="true"
+    closable="true"
+    width="2250px"
+    @ok="closeViewDialog"
+    @update:visible="showViewDialog"
+    @on-before-open="searchTaskDetail"
+  >
+    <a-form :data="detailsSmoke">
+      <a-row :gutter="12">
+        <a-col v-for="(value, field) in detailsSmoke" :key="field" :span="8">
+          <a-form-item :field="field" :label="field">
+            <a-input
+              v-model="detailsSmoke[field]"
+              :placeholder="`please enter ${field}`"
+            />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
@@ -410,6 +436,8 @@
     PolicyRecord,
     PolicyParams,
     CreateEdpSmokePar,
+    ViewEdpSmokePar,
+    ViewEdpSmokeDetail,
   } from '@/api/smoke';
   import { Message } from '@arco-design/web-vue';
 
@@ -418,25 +446,6 @@
 
   const generateFormModel = () => {
     return {
-      ip: '',
-      port: '',
-      sender: '',
-      target: '',
-      account: '',
-      market: 'EDP',
-      actionType: '',
-      orderQty: null,
-      ordType: '',
-      side: '',
-      symbol: '',
-      timeInForce: '',
-      crossingPriceType: 'EDP',
-      rule80A: '',
-      cashMargin: '',
-      marginTransactionType: '',
-      minQty: null,
-      orderClassification: '',
-      selfTradePreventionId: '',
       source: '',
       createdTime: [],
       status: '',
@@ -452,7 +461,8 @@
   const showColumns = ref<Column[]>([]);
   const size = ref<SizeProps>('medium');
   const showCreateDialog = ref(false);
-  const Shell: (string | number)[] = [];
+  const showViewDialog = ref(false);
+  const detailsSmoke: ref<ViewEdpSmokeDetail[]> = ref([]);
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
@@ -470,6 +480,30 @@
     sender: '',
     target: '',
     account: '',
+    market: '' || 'EDP',
+    actionType: '',
+    orderQty: null,
+    ordType: '',
+    side: '',
+    symbol: '',
+    timeInForce: '',
+    crossingPriceType: '' || 'EDP',
+    rule80A: '',
+    cashMargin: '',
+    marginTransactionType: '',
+    minQty: null,
+    orderClassification: '',
+    selfTradePreventionId: '',
+    price: '',
+  });
+
+  const detailsForm = reactive({
+    source: 'Admin',
+    ip: detailsSmoke.value.ip,
+    port: detailsSmoke.value.port,
+    sender: detailsSmoke.value.sender,
+    target: detailsSmoke.value.target,
+    account: detailsSmoke.value.account,
     market: '' || 'EDP',
     actionType: '',
     orderQty: null,
@@ -695,6 +729,27 @@
     }, 1000);
   };
 
+  const openViewDialog = async (record: any) => {
+    try {
+      const { taskId } = record;
+      showViewDialog.value = true;
+      const data = await ViewEdpSmokePar({ taskId });
+      console.log(data);
+      detailsSmoke.value = data.data;
+      //   const detailData = detailsSmoke.value.data;
+      console.log(detailsSmoke.value);
+      // 在这里处理 data
+    } catch (err) {
+      Message.error('Loading Error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closeViewDialog = () => {
+    showViewDialog.value = false;
+  };
+
   const createTask = async () => {
     setLoading(true);
     try {
@@ -718,9 +773,9 @@
     setLoading(true);
     try {
       const { data } = await queryPolicyList(params);
-      console.log(data.data);
       //   加载数据
       renderData.value = data.data;
+      console.log(renderData.value);
       //   当前页码
       pagination.current = params.current;
       //   当前总数

@@ -22,6 +22,7 @@ axios.interceptors.request.use(
     // Authorization is a custom headers key
     // please modify it according to the actual situation
     const token = getToken();
+    console.log(token);
     if (token) {
       if (!config.headers) {
         config.headers = {};
@@ -35,45 +36,44 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-// add response interceptors
-// axios.interceptors.response.use(
-//   (response: AxiosResponse<HttpResponse>) => {
-//     const res = response;
-//     // if the custom code is not 20000, it is judged as an error.
-//     console.log(response);
-//     if (res.status !== 200) {
-//       Message.error({
-//         content: 'Error',
-//         duration: 5 * 1000,
-//       });
-//       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-//       if (
-//         [50008, 50012, 50014].includes(res.status) &&
-//         response.config.url !== '/api/user/info'
-//       ) {
-//         Modal.error({
-//           title: 'Confirm logout',
-//           content:
-//             'You have been logged out, you can cancel to stay on this page, or log in again',
-//           okText: 'Re-Login',
-//           async onOk() {
-//             const userStore = useUserStore();
 
-//             await userStore.logout();
-//             window.location.reload();
-//           },
-//         });
-//       }
-//       return Promise.reject(new Error(res.status || 'Error'));
-//     }
-//     // console.log(res);
-//     return res;
-//   },
-//   (error) => {
-//     Message.error({
-//       content: error.msg || 'Request Error',
-//       duration: 5 * 1000,
-//     });
-//     return Promise.reject(error);
-//   }
-// );
+// add response interceptors
+axios.interceptors.response.use(
+  (response: AxiosResponse<HttpResponse>) => {
+    const res = response;
+    // if the custom code is not 20000, it is judged as an error.
+    if (res.status !== 200) {
+      Message.error({
+        content: 'Error',
+        duration: 5 * 1000,
+      });
+      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
+      if (
+        [50008, 50012, 50014].includes(res.status) &&
+        response.config.url !== '/api/user/info'
+      ) {
+        Modal.error({
+          title: 'Confirm logout',
+          content:
+            'You have been logged out, you can cancel to stay on this page, or log in again',
+          okText: 'Re-Login',
+          async onOk() {
+            const userStore = useUserStore();
+
+            await userStore.logout();
+            window.location.reload();
+          },
+        });
+      }
+      return Promise.reject(new Error(res.status || 'Error'));
+    }
+    return res;
+  },
+  (error) => {
+    Message.error({
+      content: error.msg || 'Request Error',
+      duration: 5 * 1000,
+    });
+    return Promise.reject(error);
+  }
+);

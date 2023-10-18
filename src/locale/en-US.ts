@@ -9,6 +9,7 @@ import localEdpSmoke from '@/views/edp-management/smoke/locale/en-US';
 import localRolxRegression from '@/views/rolx-management/regression/locale/en-US';
 import localRolxPerformance from '@/views/rolx-management/performance/locale/en-US';
 import localRolxFullstock from '@/views/rolx-management/fullstock/locale/en-US';
+import localUser from '@/views/user-management/locale/en-US';
 
 import localeSettings from './en-US/settings';
 
@@ -19,12 +20,12 @@ export default {
   'menu.server.monitor': 'Monitor-Server',
   'menu.list': 'List',
   'menu.result': 'Result',
+  'menu.user': 'User Management',
   'menu.task.management': 'Task Management',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
   'menu.profile': 'Profile',
   'menu.visualization': 'Data Visualization',
-  'menu.user': 'User Center',
   'menu.arcoWebsite': 'Arco Design',
   'menu.faq': 'FAQ',
   'menu.edp': 'EDP',
@@ -42,4 +43,5 @@ export default {
   ...localRolxRegression,
   ...localRolxPerformance,
   ...localRolxFullstock,
+  ...localUser,
 };

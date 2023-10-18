@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.edp', 'menu.edp.performance']" />
-    <a-card class="general-card" :title="$t('menu.task.searchTable')">
+    <Breadcrumb :items="['menu.user', 'menu.user.management']" />
+    <a-card class="general-card" :title="$t('menu.user.searchTable')">
       <a-row>
         <a-col :flex="1">
           <a-form
@@ -12,45 +12,11 @@
           >
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item
-                  field="taskId"
-                  :label="$t('searchTable.form.taskId')"
-                >
+                <a-form-item field="name" :label="$t('searchTable.form.name')">
                   <a-input
-                    v-model="formModel.taskId"
-                    :placeholder="$t('searchTable.form.taskId.placeholder')"
+                    v-model="formModel.name"
+                    :placeholder="$t('searchTable.form.name.placeholder')"
                   />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="Source"
-                  :label="$t('searchTable.form.source')"
-                >
-                  <a-input
-                    v-model="formModel.source"
-                    :placeholder="$t('searchTable.form.Source.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="status"
-                  :label="$t('searchTable.form.status')"
-                >
-                  <a-select
-                    v-model="formModel.status"
-                    :options="statusOptions"
-                    :placeholder="$t('searchTable.form.selectDefault')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="createdTime"
-                  :label="$t('searchTable.form.createdTime')"
-                >
-                  <a-range-picker @change="onChange" @select="onSelect" />
                 </a-form-item>
               </a-col>
             </a-row>
@@ -65,12 +31,6 @@
               </template>
               {{ $t('searchTable.form.search') }}
             </a-button>
-            <!-- <a-button @click="reset">
-              <template #icon>
-                <icon-refresh />
-              </template>
-              {{ $t('searchTable.form.reset') }}
-            </a-button> -->
           </a-space>
         </a-col>
       </a-row>
@@ -90,41 +50,57 @@
             </a-button>
             <a-modal
               :visible="showCreateDialog"
-              title="Create Task"
+              title="Create User"
+              ok-text="Confirm"
+              mask-closable="false"
+              @cancel-text="Cancel"
               @update:visible="showCreateDialog"
-              okText="Confirm"
-              @ok="createTask"
-              cancelText="Cancel"
+              @ok="createUser"
               @cancel="handleCancel"
               @before-ok="handleBeforeOk"
-              maskClosable="false"
-              width="600px"
             >
               <a-form :model="createTaskForm">
-                <a-form-item field="source" label="source">
-                  <a-input
-                    v-model="createTaskForm.source"
-                    placeholder="please enter your username..."
-                  />
-                </a-form-item>
-                <a-form-item
-                  v-for="(command, index) of createTaskForm.commands"
-                  :field="`commands[${index}].value`"
-                  :label="`Command-${index}`"
-                  :key="index"
-                  :rules="[{ required: true, message: 'Command is required' }]"
-                >
-                  <a-textarea v-model="command.value" auto-size />
-                  <a-button
-                    @click="handleDelete(index)"
-                    :style="{ marginLeft: '10px' }"
-                    >Delete</a-button
-                  >
-                </a-form-item>
+                <a-row :gutter="16">
+                  <!-- <a-divider /> -->
+                  <a-col>
+                    <a-form-item field="email" label="Email">
+                      <a-input
+                        v-model="createUserForm.email"
+                        placeholder="Enter your company email"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col>
+                    <a-table-column>
+                      <a-form-item field="name" label="Name">
+                        <a-input
+                          v-model="createUserForm.name"
+                          placeholder="Enter your first name"
+                        />
+                      </a-form-item>
+                    </a-table-column>
+                  </a-col>
+
+                  <a-col>
+                    <a-form-item field="password" label="Password">
+                      <a-input-password
+                        v-model="createUserForm.password"
+                        placeholder="Enter your password"
+                        allow-clear
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col>
+                    <a-form-item field="role" label="Role">
+                      <a-input
+                        v-model="createUserForm.role"
+                        placeholder="please select role"
+                        disabled
+                      />
+                    </a-form-item>
+                  </a-col>
+                </a-row>
               </a-form>
-              <div>
-                <a-button @click="handleAdd">Add Command</a-button>
-              </div>
             </a-modal>
           </a-space>
         </a-col>
@@ -201,45 +177,80 @@
         <template #index="{ rowIndex }">
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
-        <template #status="{ record }">
-          <span v-if="record.status === 'completed'" class="circle"></span>
-          <span
-            v-if="record.status === 'progressing'"
-            class="circle pass"
-          ></span>
-          <span v-if="record.status === 'error'" class="circle err"></span>
-          {{ $t(`searchTable.form.status.${record.status}`) }}
-          <icon-exclamation-circle v-if="record.status === 'error'" />
-        </template>
-        <template #operations>
-          <a-button type="text" size="small">
-            {{ $t('searchTable.columns.operations.view') }}
+
+        <template #operations="{ record }">
+          <a-button type="text" size="small" @click="openEditDialog(record.id)">
+            {{ $t('searchTable.columns.operations.edit') }}
           </a-button>
-          <a-button type="text" size="small">
-            {{ $t('searchTable.columns.operations.download') }}
-          </a-button>
+
+          <a-popconfirm
+            content="Are you sure you want to delete?"
+            type="error"
+            @ok="deleteUser(record.id)"
+          >
+            <a-button type="text" size="small">
+              {{ $t('searchTable.columns.operations.delete') }}
+            </a-button>
+          </a-popconfirm>
         </template>
       </a-table>
     </a-card>
   </div>
+  <a-modal
+    :visible="showEditDialog"
+    title="User Details"
+    ok-text="Confirm"
+    @ok="updateUser(userInfo)"
+    @update:visible="showEditDialog"
+    @on-before-open="searchUserDetail"
+  >
+    <a-form :model="userInfo">
+      <a-row :gutter="12">
+        <a-col>
+          <a-form-item field="email" label="Email">
+            <a-input
+              v-model="userInfo.email"
+              placeholder="Enter your company email"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col>
+          <a-table-column>
+            <a-form-item field="name" label="Name">
+              <a-input v-model="userInfo.name" placeholder="Enter your name" />
+            </a-form-item>
+          </a-table-column>
+        </a-col>
+
+        <a-col>
+          <a-form-item field="role" label="Role">
+            <a-input v-model="userInfo.role" disabled />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
   import { computed, ref, reactive, watch, nextTick } from 'vue';
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
-  import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
   import type { TableColumnData } from '@arco-design/web-vue/es/table/interface';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
-  import { IconExclamationCircle } from '@arco-design/web-vue/es/icon';
   import { Pagination } from '@/types/global';
   import {
-    queryPolicyList,
-    PolicyRecord,
-    PolicyParams,
-    CreateEdpPerformancePar,
-  } from '@/api/performance';
+    queryUserList,
+    UserForm,
+    SearchParams,
+    CreateUserReq,
+    DeleteUserReq,
+    DeleteUser,
+    EditUser,
+    EditUserReq,
+    getUserDetail,
+  } from '@/api/user';
   import { Message } from '@arco-design/web-vue';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
@@ -247,23 +258,20 @@
 
   const generateFormModel = () => {
     return {
-      source: '',
-      startTime: '',
-      endTime: '',
-      //   createdTime: [],
-      status: '',
-      taskId: '',
+      name: '',
+      id: '',
     };
   };
   const { loading, setLoading } = useLoading(true);
   const { t } = useI18n();
-  const renderData: ref<PolicyRecord[]> = ref([]);
+  const renderData: ref<UserForm[]> = ref([]);
   const formModel = ref(generateFormModel());
   const cloneColumns = ref<Column[]>([]);
   const showColumns = ref<Column[]>([]);
   const size = ref<SizeProps>('medium');
   const showCreateDialog = ref(false);
-  const Shell: (string | number)[] = [];
+  const showEditDialog = ref(false);
+  const editUserData: ref<UserForm[]> = ref([]);
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
@@ -274,10 +282,20 @@
   });
 
   //   新建执行任务参数
-  const createTaskForm = reactive({
-    source: 'Admin',
-    commands: [{ value: '' }],
+  const createUserForm = reactive({
+    name: '',
+    email: '',
+    password: '',
+    role: 'Admin',
   });
+
+  const userInfo = reactive({
+    name: '',
+    email: '',
+    role: '',
+    id: '',
+  });
+
   // 定义列表显示密度选项
   const densityList = computed(() => [
     {
@@ -300,28 +318,28 @@
   // 定义列
   const columns = computed<TableColumnData[]>(() => [
     {
-      title: t('searchTable.columns.index'),
-      dataIndex: 'index',
-      slotName: 'index',
+      title: t('searchTable.columns.id'),
+      dataIndex: 'id',
+      slotName: 'id',
     },
     {
-      title: t('searchTable.columns.taskId'),
-      dataIndex: 'taskId',
-      slotName: 'taskId',
+      title: t('searchTable.columns.name'),
+      dataIndex: 'name',
+      slotName: 'name',
+    },
+    {
+      title: t('searchTable.columns.role'),
+      dataIndex: 'role',
+      slotName: 'role',
+    },
+    {
+      title: t('searchTable.columns.email'),
+      dataIndex: 'email',
+      slotName: 'email',
     },
     {
       title: t('searchTable.columns.createdTime'),
       dataIndex: 'createdTime',
-    },
-
-    {
-      title: t('searchTable.columns.source'),
-      dataIndex: 'source',
-    },
-    {
-      title: t('searchTable.columns.status'),
-      dataIndex: 'status',
-      slotName: 'status',
     },
 
     {
@@ -330,36 +348,15 @@
       slotName: 'operations',
     },
   ]);
-  // 定义状态项
-  const statusOptions = computed<SelectOptionData[]>(() => [
-    {
-      label: t('searchTable.form.status.progressing'),
-      value: 'progressing',
-    },
-    {
-      label: t('searchTable.form.status.completed'),
-      value: 'completed',
-    },
-    {
-      label: t('searchTable.form.status.error'),
-      value: 'error',
-    },
-  ]);
-  const handleAdd = () => {
-    createTaskForm.commands.push({
-      value: '',
-    });
-  };
-  const handleDelete = (index: number) => {
-    createTaskForm.commands.splice(index, 1);
-  };
 
   const openCreateDialog = () => {
+    createUserForm.email = '';
+    createUserForm.name = '';
+    createUserForm.password = '';
     showCreateDialog.value = true;
   };
 
   const handleCancel = () => {
-    createTaskForm.commands = [];
     showCreateDialog.value = false;
   };
 
@@ -369,32 +366,76 @@
     }, 1000);
   };
 
-  const createTask = async () => {
+  const closeViewDialog = () => {
+    showEditDialog.value = false;
+  };
+
+  const openEditDialog = async (params: EditUser) => {
+    showEditDialog.value = true;
+    console.log(params);
+    const response = await getUserDetail(params);
+    console.log(response);
+    editUserData.value = response.data;
+    console.log(editUserData.value);
+    // const firstUserData = editUserData.value.data[0];
+    // console.log(editUserData.value);
+    // userInfo.email = firstUserData.email;
+    // userInfo.name = firstUserData.name;
+    // userInfo.role = firstUserData.role;
+    // userInfo.id = firstUserData.id;
+  };
+
+  const updateUser = async (data: UserForm) => {
     setLoading(true);
     try {
-      console.log(createTaskForm);
-      const response = await CreateEdpPerformancePar(createTaskForm);
+      console.log(data);
+      const updateUserRes = await EditUserReq(data);
+      fetchData();
+    } catch (error) {
+      // 处理错误，例如显示错误消息或记录错误日志
+      Message.error(t('updateUser.form.status.fail'));
+    } finally {
+      Message.success(t('updateUser.form.status.success'));
+      showEditDialog.value = false;
+      setLoading(false);
+    }
+  };
+
+  const createUser = async () => {
+    setLoading(true);
+    try {
+      const response = await CreateUserReq(createUserForm);
       const responseData = response.data;
       fetchData();
     } catch (error) {
       // 处理错误，例如显示错误消息或记录错误日志
-      Message.error(t('createTask.form.status.fail'));
+      Message.error(t('createUser.form.status.fail'));
     } finally {
-      Message.success(t('createTask.form.status.success'));
-      createTaskForm.commands = [];
+      Message.success(t('createUser.form.status.success'));
       showCreateDialog.value = false;
       setLoading(false);
     }
   };
 
+  const deleteUser = async (data: DeleteUser) => {
+    try {
+      console.log(data);
+      const response = DeleteUserReq(data);
+      fetchData();
+    } catch (error) {
+      Message.error(t('deleteUser.form.status.fail'));
+    } finally {
+      Message.success(t('deleteUser.form.status.success'));
+    }
+  };
+
   // 进入列表，加载数据
   const fetchData = async (
-    params: PolicyParams = { current: 1, pageSize: 10 }
+    params: SearchParams = { current: 1, pageSize: 10 }
   ) => {
     setLoading(true);
     try {
-      const { data } = await queryPolicyList(params);
-      console.log(data.data);
+      const { data } = await queryUserList(params);
       //   加载数据
       renderData.value = data.data;
       //   当前页码
@@ -403,22 +444,10 @@
       pagination.total = data.data.length;
     } catch (err) {
       //   Message.error('请求失败，请稍后重试');
-      Message.error('Loading Error');
+      //   Message.error('Loading Error');
     } finally {
       setLoading(false);
     }
-  };
-
-  const onSelect = (dateString: string, date: Date) => {
-    // console.log('onSelect', dateString, date);
-  };
-  const onChange = (
-    [start, end]: [string, string],
-    [startDate, endDate]: [Date, Date]
-  ) => {
-    formModel.value.startTime = start;
-    formModel.value.endTime = end;
-    console.log('onChange: ', start);
   };
 
   // 带查询条件进行数据查询
@@ -426,7 +455,7 @@
     fetchData({
       ...basePagination,
       ...formModel.value,
-    } as unknown as PolicyParams);
+    } as unknown as SearchParams);
   };
 
   const onPageChange = (current: number) => {
@@ -434,9 +463,7 @@
   };
 
   fetchData();
-  //   const reset = () => {
-  //     formModel.value = generateFormModel();
-  //   };
+
   // 选择显示列表密度
   const handleSelectDensity = (
     val: string | number | Record<string, any> | undefined,
@@ -508,7 +535,7 @@
 
 <script lang="ts">
   export default {
-    name: 'performance',
+    name: 'user',
   };
 </script>
 
@@ -541,6 +568,6 @@
     }
   }
   .arco-modal {
-    width: 600px;
+    width: 800px;
   }
 </style>

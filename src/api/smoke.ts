@@ -19,7 +19,7 @@ export interface PolicyListRes {
   data: PolicyRecord[];
 }
 
-// search regression
+// search
 export function queryPolicyList(params: PolicyParams) {
   return axios.get<PolicyListRes>('api/edp_smoke_list', {
     params,
@@ -59,12 +59,54 @@ export interface CreateEdpSmokeRes {
   code: number;
 }
 
-// create regression task
+//
 export function CreateEdpSmokePar(data: CreateEdpSmoke) {
   return axios.post<CreateEdpSmokeRes>(
     '/api/edp_smoke_list/run_edp_smoke',
     data
   );
+}
+
+export interface ViewEdpSmokeDetail {
+  source: string;
+  ip: string;
+  port: string;
+  sender: string;
+  target: string;
+  account: string;
+  market: string;
+  actionType: string;
+  orderQty: number;
+  ordType: string;
+  side: string;
+  symbol: string;
+  timeInForce: string;
+  crossingPriceType: string;
+  rule80A: string;
+  cashMargin: string;
+  marginTransactionType: string;
+  minQty: number;
+  orderClassification: string;
+  selfTradePreventionId: string;
+  price: number;
+  taskId: string;
+}
+export interface ViewEdpSmoke {
+  taskId: string;
+}
+
+export interface ViewEdpSmokeRes {
+  data: [];
+}
+
+//
+export function ViewEdpSmokePar(params: ViewEdpSmoke) {
+  return axios.get<ViewEdpSmokeRes>('/api/smoke_list/view_edp_smoke', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
 }
 
 export interface ServiceRecord {

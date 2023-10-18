@@ -4,7 +4,7 @@
       <img src="../../../assets/images/logo.png" alt="" />
     </div>
     <div class="login-form-sub-title">{{ $t('login.form.title') }}</div>
-    <div class="login-form-error-msg">{{ errorMessage }}</div>
+    <div class="login-form-error-msg">{{ record }}</div>
     <a-form
       ref="loginForm"
       :model="userInfo"
@@ -91,6 +91,7 @@
   import { useUserStore } from '@/store';
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
+  import { login } from '@/api/user';
 
   const router = useRouter();
   const { t } = useI18n();
@@ -100,50 +101,58 @@
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
-    email: 'admin@fsx.com', // 演示默认值
-    password: 'ab12345678',
+    email: '', // 演示默认值
+    password: '',
     code: 123,
   });
   const userInfo = reactive({
-    email: loginConfig.value.email,
-    password: loginConfig.value.password,
-    code: loginConfig.value.code,
+    email: '',
+    password: '',
+    code: '',
+    rememberPassword: true,
   });
 
-  const handleSubmit = async ({
-    errors,
-    values,
-  }: {
-    errors: Record<string, ValidatedError> | undefined;
-    values: Record<string, any>;
-  }) => {
+  const handleSubmit = async () => {
     if (loading.value) return;
-    if (!errors) {
-      setLoading(true);
-      try {
-        await userStore.login(values as LoginData);
-        const { redirect, ...othersQuery } = router.currentRoute.value.query;
-        router.push({
-          name: (redirect as string) || 'myTask',
-          query: {
-            ...othersQuery,
-          },
-        });
-        Message.success(t('login.form.login.success'));
-        const { rememberPassword } = loginConfig.value;
-        const { email, password, code } = values;
-        // 实际生产环境需要进行加密存储。
-        loginConfig.value.email = rememberPassword ? email : '';
-        loginConfig.value.password = rememberPassword ? password : '';
-      } catch (err) {
-        errorMessage.value = (err as Error).message;
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    try {
+      const loginData = {
+        email: userInfo.email,
+        password: userInfo.password,
+        code: userInfo.code,
+        rememberPassword: userInfo.rememberPassword,
+      };
+      await userStore.login(loginData);
+
+      const { redirect, ...othersQuery } = router.currentRoute.value.query;
+      router.push({
+        name: (redirect as string) || 'users',
+        query: {
+          ...othersQuery,
+        },
+      });
+      console.log('Redirected to:', (redirect as string) || 'users');
+      Message.success(t('login.form.login.success'));
+      if (loginConfig.value.rememberPassword) {
+        // 更新登录配置
+        loginConfig.value.email = userInfo.email;
+        loginConfig.value.password = userInfo.password;
       }
+    } catch (err) {
+      console.log(err);
+      errorMessage.value = (err as Error).message;
+    } finally {
+      setLoading(false);
     }
   };
   const setRememberPassword = (value: boolean) => {
     loginConfig.value.rememberPassword = value;
+  };
+</script>
+
+<script lang="ts">
+  export default {
+    name: 'login',
   };
 </script>
 

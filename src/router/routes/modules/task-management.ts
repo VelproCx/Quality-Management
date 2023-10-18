@@ -9,7 +9,7 @@ const TASK: AppRouteRecordRaw = {
     locale: 'menu.task.management',
     requiresAuth: true,
     icon: 'icon-calendar',
-    order: 0,
+    order: 1,
   },
   children: [
     {

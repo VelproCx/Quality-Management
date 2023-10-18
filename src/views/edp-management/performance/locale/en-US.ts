@@ -7,11 +7,13 @@ export default {
 
   'searchTable.form.createdTime': 'Created Time',
 
+  'searchTable.form.taskId': 'taskId',
   'searchTable.form.status': 'status',
   'searchTable.form.status.progressing': 'Progressing',
   'searchTable.form.status.completed': 'Completed',
   'searchTable.form.status.error': 'Error',
   'searchTable.form.selectDefault': 'Please select status',
+  'searchTable.form.taskId.placeholder': 'Please enter taskId',
 
   'searchTable.form.search': 'Search',
   'searchTable.form.reset': 'Reset',
