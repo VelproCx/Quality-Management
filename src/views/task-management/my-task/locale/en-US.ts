@@ -8,7 +8,7 @@ export default {
   'searchTable.form.Taskname': 'Task Name',
   'searchTable.form.Taskname.placeholder': 'Please enter Task Name',
 
-  'searchTable.form.createdTime': 'Created Time',
+  'searchTable.form.createTime': 'Create Time',
 
   'searchTable.form.status': 'status',
   'searchTable.form.status.planning': 'planning',
@@ -39,6 +39,6 @@ export default {
   'searchTable.columns.tapdId': 'Tapd Id',
   'searchTable.columns.taskName': 'Task Name',
   'searchTable.columns.handler': 'Handler',
-  'searchTable.columns.createdTime': 'CreatedTime',
+  'searchTable.columns.createTime': 'CreateTime',
   'searchTable.columns.status': 'Status',
 };

@@ -10,7 +10,7 @@ export default {
   'searchTable.form.source.placeholder': 'Please enter source',
   'searchTable.form.taskId.placeholder': 'Please enter taskId',
   'searchTable.form.taskId': 'TaskId',
-  'searchTable.form.createdTime': 'Created Time',
+  'searchTable.form.createTime': 'Create Time',
 
   'searchTable.form.status': 'status',
   'searchTable.form.status.new': 'New',
@@ -45,7 +45,7 @@ export default {
   'searchTable.columns.ordType': 'ordType',
   'searchTable.columns.side': 'side',
   'searchTable.columns.handler': 'Handler',
-  'searchTable.columns.createdTime': 'CreatedTime',
+  'searchTable.columns.createTime': 'CreateTime',
   'searchTable.columns.status': 'Status',
   'searchTable.columns.source': 'Source',
 

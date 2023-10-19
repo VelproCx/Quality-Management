@@ -47,8 +47,8 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="createdTime"
-                  :label="$t('searchTable.form.createdTime')"
+                  field="createTime"
+                  :label="$t('searchTable.form.createTime')"
                 >
                   <a-range-picker @change="onChange" @select="onSelect" />
                 </a-form-item>
@@ -314,8 +314,8 @@
       slotName: 'taskId',
     },
     {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
+      title: t('searchTable.columns.createTime'),
+      dataIndex: 'createTime',
     },
 
     {

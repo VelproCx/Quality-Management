@@ -8,7 +8,7 @@ export default {
   'searchTable.form.Taskname': '任务名称',
   'searchTable.form.Taskname.placeholder': '请输入任务名称',
 
-  'searchTable.form.createdTime': '创建时间',
+  'searchTable.form.createTime': '创建时间',
 
   'searchTable.form.status': '状态',
   'searchTable.form.status.planning': '计划中',
@@ -40,6 +40,6 @@ export default {
   'searchTable.columns.tapdId': 'Tapd Id',
   'searchTable.columns.taskName': '任务名称',
   'searchTable.columns.handler': '负责人',
-  'searchTable.columns.createdTime': '创建时间',
+  'searchTable.columns.createTime': '创建时间',
   'searchTable.columns.status': '状态',
 };

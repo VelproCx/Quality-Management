@@ -2,7 +2,7 @@ export default {
   'menu.task.myTask': '我的任务',
   'menu.task.searchTable': '查询表格',
 
-  'searchTable.form.createdTime': '创建时间',
+  'searchTable.form.createTime': '创建时间',
 
   'searchTable.form.status': '状态',
   'searchTable.form.status.progressing': '进行中',
@@ -32,7 +32,7 @@ export default {
   // columns
   'searchTable.columns.index': '#',
   'searchTable.columns.handler': '操作人',
-  'searchTable.columns.createdTime': '创建时间',
+  'searchTable.columns.createTime': '创建时间',
   'searchTable.columns.status': '状态',
 
   'createTask.form.status.success': '创建成功 !',

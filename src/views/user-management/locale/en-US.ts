@@ -26,7 +26,7 @@ export default {
   'searchTable.columns.name': 'Name',
   'searchTable.columns.role': 'Role',
   'searchTable.columns.email': 'Email',
-  'searchTable.columns.createdTime': 'CreatedTime',
+  'searchTable.columns.createTime': 'CreateTime',
   'searchTable.columns.operations.edit': 'Edit',
   'searchTable.columns.operations.delete': 'Delete',
   'deleteUser.form.status.fail': 'Delete User Failed',

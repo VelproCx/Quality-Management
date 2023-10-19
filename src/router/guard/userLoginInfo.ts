@@ -10,7 +10,6 @@ export default function setupUserLoginInfoGuard(router: Router) {
     const userStore = useUserStore();
     if (isLogin()) {
       const role = window.localStorage.getItem('userRole') || 'admin';
-      console.log(role);
       userStore.role = role;
       if (userStore.role) {
         next();

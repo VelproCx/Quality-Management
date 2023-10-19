@@ -3,7 +3,7 @@ import qs from 'query-string';
 import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
 export interface PolicyRecord {
-  startTime: string;
+  createTime: string;
   endTime: string;
   source: string;
   status: string;
@@ -64,14 +64,4 @@ export function DownloadPerformanceLogPar(params: DownloadPerformanceLog) {
       },
     }
   );
-}
-
-export interface ServiceRecord {
-  title: string;
-  description: string;
-  name?: string;
-  icon?: string;
-  data?: DescData[];
-  enable?: boolean;
-  expires?: boolean;
 }

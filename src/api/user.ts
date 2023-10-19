@@ -12,7 +12,7 @@ export interface LoginData {
 
 export interface UserForm {
   role: string;
-  createdTime: [];
+  createTime: [];
   email: string;
   name: string;
   id: number;

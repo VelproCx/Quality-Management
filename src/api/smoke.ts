@@ -4,7 +4,7 @@ import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
 //
 export interface PolicyRecord {
-  createdTime: string;
+  createTime: string;
   source: string;
   status: string;
   taskId: string;

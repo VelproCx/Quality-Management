@@ -7,7 +7,7 @@ export interface PolicyRecord {
   taskName: string;
   handler: string;
   status: string;
-  createdTime: string;
+  createTime: string;
 }
 
 export interface PolicyParams extends Partial<PolicyRecord> {

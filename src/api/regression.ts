@@ -3,7 +3,8 @@ import qs from 'query-string';
 import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
 export interface PolicyRecord {
-  createdTime: string;
+  createTime: string;
+  endTime: string;
   source: string;
   status: string;
   taskId: string;

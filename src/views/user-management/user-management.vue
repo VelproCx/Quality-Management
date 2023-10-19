@@ -336,8 +336,8 @@
       slotName: 'email',
     },
     {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
+      title: t('searchTable.columns.createTime'),
+      dataIndex: 'createTime',
     },
 
     {

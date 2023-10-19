@@ -5,7 +5,7 @@ export default {
 
   'menu.task.searchTable': 'Search Table',
 
-  'searchTable.form.createdTime': 'Created Time',
+  'searchTable.form.createTime': 'Create Time',
 
   'searchTable.form.taskId': 'taskId',
   'searchTable.form.status': 'status',
@@ -36,7 +36,7 @@ export default {
   // columns
   'searchTable.columns.index': '#',
   'searchTable.columns.handler': 'Handler',
-  'searchTable.columns.createdTime': 'CreatedTime',
+  'searchTable.columns.createTime': 'CreateTime',
   'searchTable.columns.status': 'Status',
 
   'createTask.form.status.success': 'Create Success !',

@@ -35,11 +35,11 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="createdTime"
-                  :label="$t('searchTable.form.createdTime')"
+                  field="createTime"
+                  :label="$t('searchTable.form.createTime')"
                 >
                   <a-range-picker
-                    v-model="formModel.createdTime"
+                    v-model="formModel.createTime"
                     style="width: 100%"
                   />
                 </a-form-item>
@@ -211,7 +211,7 @@
       id: '',
       taskName: '',
       handler: '',
-      createdTime: [],
+      createTime: [],
       status: '',
     };
   };
@@ -283,8 +283,8 @@
       slotName: 'status',
     },
     {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
+      title: t('searchTable.columns.createTime'),
+      dataIndex: 'createTime',
     },
     {
       title: t('searchTable.columns.operations'),

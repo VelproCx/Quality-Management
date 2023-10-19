@@ -5,7 +5,7 @@ export interface UserState {
   role: string;
   id?: number;
   status?: string;
-  createdTime?: string;
+  createTime?: string;
   updateTime?: string;
   isDelete?: string;
 }

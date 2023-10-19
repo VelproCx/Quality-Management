@@ -9,7 +9,7 @@ export default {
   'searchTable.form.Source': 'Source',
   'searchTable.form.Source.placeholder': 'Please enter source',
 
-  'searchTable.form.createdTime': 'Created Time',
+  'searchTable.form.createTime': 'Create Time',
 
   'searchTable.form.status': 'status',
   'searchTable.form.status.progressing': 'progressing',
@@ -36,6 +36,6 @@ export default {
   // columns
   'searchTable.columns.index': '#',
   'searchTable.columns.handler': 'Handler',
-  'searchTable.columns.createdTime': 'CreatedTime',
+  'searchTable.columns.createTime': 'CreateTime',
   'searchTable.columns.status': 'Status',
 };

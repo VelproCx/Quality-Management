@@ -36,8 +36,8 @@
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="createdTime"
-                  :label="$t('searchTable.form.createdTime')"
+                  field="createTime"
+                  :label="$t('searchTable.form.createTime')"
                 >
                   <a-range-picker
                     v-model="formModel.createdTime"
@@ -88,7 +88,6 @@
               @ok="createTask"
               cancelText="Cancel"
               @cancel="handleCancel"
-              @before-ok="handleBeforeOk"
               maskClosable="false"
               width="600px"
             >
@@ -200,9 +199,15 @@
           <span v-if="record.status === 'error'" class="circle err"></span>
           {{ $t(`searchTable.form.status.${record.status}`) }}
           <span v-if="record.status === 'error'" class="circle err"></span>
-          <icon-exclamation-circle
-            :style="{ fontSize: '24px', color: 'red' }"
-          />
+          <a-popover position="top">
+            <icon-exclamation-circle
+              v-if="record.status === 'error'"
+              :style="{ fontSize: '24px', color: 'red', verticalAlign: '-7px' }"
+            />
+            <template #content>
+              <p>{{ record.output }}</p>
+            </template>
+          </a-popover>
         </template>
         <template #operations>
           <a-button type="text" size="small">
@@ -242,7 +247,7 @@
   const generateFormModel = () => {
     return {
       source: '',
-      createdTime: [],
+      createTime: [],
       status: '',
       taskId: '',
     };
@@ -302,8 +307,8 @@
       slotName: 'taskId',
     },
     {
-      title: t('searchTable.columns.createdTime'),
-      dataIndex: 'createdTime',
+      title: t('searchTable.columns.createTime'),
+      dataIndex: 'createTime',
     },
 
     {
@@ -354,12 +359,6 @@
   const handleCancel = () => {
     createTaskForm.commands = [];
     showCreateDialog.value = false;
-  };
-
-  const handleBeforeOk = (done: any) => {
-    window.setTimeout(() => {
-      done();
-    }, 1000);
   };
 
   const createTask = async () => {
