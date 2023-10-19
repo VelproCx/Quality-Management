@@ -734,10 +734,8 @@
       const { taskId } = record;
       showViewDialog.value = true;
       const data = await ViewEdpSmokePar({ taskId });
-      console.log(data);
       detailsSmoke.value = data.data;
       //   const detailData = detailsSmoke.value.data;
-      console.log(detailsSmoke.value);
       // 在这里处理 data
     } catch (err) {
       Message.error('Loading Error');
@@ -775,7 +773,6 @@
       const { data } = await queryPolicyList(params);
       //   加载数据
       renderData.value = data.data;
-      console.log(renderData.value);
       //   当前页码
       pagination.current = params.current;
       //   当前总数

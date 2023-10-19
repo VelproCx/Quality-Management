@@ -30,7 +30,7 @@ export function queryPolicyList(params: PolicyParams) {
 
 export interface CreateEdpPerformance {
   source: string;
-  commands: [];
+  commands: { value: string }[];
 }
 
 export interface CreateEdpPerformanceRes {
@@ -41,8 +41,28 @@ export interface CreateEdpPerformanceRes {
 
 export function CreateEdpPerformancePar(data: CreateEdpPerformance) {
   return axios.post<CreateEdpPerformanceRes>(
-    '/api/performance_list/run_edp_performance',
+    '/api/edp_performance_list/run_edp_performance',
     data
+  );
+}
+
+export interface DownloadPerformanceLog {
+  taskId: string;
+}
+
+export interface DownloadPerformanceLogRes {
+  data: [];
+}
+
+export function DownloadPerformanceLogPar(params: DownloadPerformanceLog) {
+  return axios.get<DownloadPerformanceLogRes>(
+    '/api/edp_performance_list/download_performance_logs',
+    {
+      params,
+      paramsSerializer: (obj) => {
+        return qs.stringify(obj);
+      },
+    }
   );
 }
 

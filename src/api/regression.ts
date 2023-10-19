@@ -30,7 +30,7 @@ export function queryPolicyList(params: PolicyParams) {
 
 export interface CreateEdpRegression {
   source: string;
-  commands: [];
+  commands: { value: string }[];
 }
 
 export interface CreateEdpRegressionRes {
@@ -40,19 +40,9 @@ export interface CreateEdpRegressionRes {
 }
 
 // create regression task
-export function CreateEdpPerformancePar(data: CreateEdpRegression) {
+export function CreateEdpRegressionPar(data: CreateEdpRegression) {
   return axios.post<CreateEdpRegressionRes>(
-    '/api/performance_list/run_edp_regression',
+    '/api/edp_regression_list/run_edp_regression',
     data
   );
-}
-
-export interface ServiceRecord {
-  title: string;
-  description: string;
-  name?: string;
-  icon?: string;
-  data?: DescData[];
-  enable?: boolean;
-  expires?: boolean;
 }

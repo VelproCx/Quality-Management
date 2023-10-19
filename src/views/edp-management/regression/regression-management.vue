@@ -164,9 +164,7 @@
                     <div>
                       <a-checkbox
                         v-model="item.checked"
-                        @change="
-                          handleChange($event, item as TableColumnData, index)
-                        "
+                        @change="handleChange($event, item, index)"
                       >
                       </a-checkbox>
                     </div>
@@ -184,7 +182,7 @@
         row-key="id"
         :loading="loading"
         :pagination="pagination"
-        :columns="(cloneColumns as TableColumnData[])"
+        :columns="cloneColumns"
         :data="renderData"
         :bordered="false"
         :size="size"
@@ -224,7 +222,7 @@
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
-  import type { TableColumnData } from '@arco-design/web-vue/es/table/interface';
+  import { TableColumnData } from '@arco-design/web-vue/es/table/interface';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
   import { Pagination } from '@/types/global';
@@ -234,6 +232,7 @@
     PolicyRecord,
     PolicyParams,
     CreateEdpRegressionPar,
+    CreateEdpRegression,
   } from '@/api/regression';
   import { Message } from '@arco-design/web-vue';
 
@@ -250,7 +249,7 @@
   };
   const { loading, setLoading } = useLoading(true);
   const { t } = useI18n();
-  const renderData: ref<PolicyRecord[]> = ref([]);
+  const renderData = ref<PolicyRecord[]>([]);
   const formModel = ref(generateFormModel());
   const cloneColumns = ref<Column[]>([]);
   const showColumns = ref<Column[]>([]);
@@ -348,6 +347,7 @@
   };
 
   const openCreateDialog = () => {
+    createTaskForm.commands = [];
     showCreateDialog.value = true;
   };
 
@@ -365,7 +365,6 @@
   const createTask = async () => {
     setLoading(true);
     try {
-      console.log(createTaskForm);
       const response = await CreateEdpRegressionPar(createTaskForm);
       const responseData = response.data;
       fetchData();

@@ -148,9 +148,7 @@
                     <div>
                       <a-checkbox
                         v-model="item.checked"
-                        @change="
-                          handleChange($event, item as TableColumnData, index)
-                        "
+                        @change="handleChange($event, item, index)"
                       >
                       </a-checkbox>
                     </div>
@@ -168,7 +166,7 @@
         row-key="id"
         :loading="loading"
         :pagination="pagination"
-        :columns="(cloneColumns as TableColumnData[])"
+        :columns="cloneColumns"
         :data="renderData"
         :bordered="false"
         :size="size"
@@ -179,14 +177,14 @@
         </template>
 
         <template #operations="{ record }">
-          <a-button type="text" size="small" @click="openEditDialog(record.id)">
+          <a-button type="text" size="small" @click="openEditDialog(record)">
             {{ $t('searchTable.columns.operations.edit') }}
           </a-button>
 
           <a-popconfirm
             content="Are you sure you want to delete?"
             type="error"
-            @ok="deleteUser(record.id)"
+            @ok="deleteUser(record)"
           >
             <a-button type="text" size="small">
               {{ $t('searchTable.columns.operations.delete') }}
@@ -236,7 +234,7 @@
   import { computed, ref, reactive, watch, nextTick } from 'vue';
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
-  import type { TableColumnData } from '@arco-design/web-vue/es/table/interface';
+  import { TableColumnData } from '@arco-design/web-vue/es/table/interface';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
   import { Pagination } from '@/types/global';
@@ -372,17 +370,13 @@
 
   const openEditDialog = async (params: EditUser) => {
     showEditDialog.value = true;
-    console.log(params);
     const response = await getUserDetail(params);
-    console.log(response);
     editUserData.value = response.data;
-    console.log(editUserData.value);
-    // const firstUserData = editUserData.value.data[0];
-    // console.log(editUserData.value);
-    // userInfo.email = firstUserData.email;
-    // userInfo.name = firstUserData.name;
-    // userInfo.role = firstUserData.role;
-    // userInfo.id = firstUserData.id;
+    const firstUserData = editUserData.value.data;
+    userInfo.email = firstUserData.email;
+    userInfo.name = firstUserData.name;
+    userInfo.role = firstUserData.role;
+    userInfo.id = firstUserData.id;
   };
 
   const updateUser = async (data: UserForm) => {
@@ -419,13 +413,12 @@
 
   const deleteUser = async (data: DeleteUser) => {
     try {
-      console.log(data);
-      const response = DeleteUserReq(data);
-      fetchData();
+      await DeleteUserReq(data);
     } catch (error) {
       Message.error(t('deleteUser.form.status.fail'));
     } finally {
       Message.success(t('deleteUser.form.status.success'));
+      fetchData();
     }
   };
 

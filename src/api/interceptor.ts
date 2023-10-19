@@ -22,7 +22,6 @@ axios.interceptors.request.use(
     // Authorization is a custom headers key
     // please modify it according to the actual situation
     const token = getToken();
-    console.log(token);
     if (token) {
       if (!config.headers) {
         config.headers = {};

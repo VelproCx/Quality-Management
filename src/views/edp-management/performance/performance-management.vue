@@ -172,9 +172,7 @@
                     <div>
                       <a-checkbox
                         v-model="item.checked"
-                        @change="
-                          handleChange($event, item as TableColumnData, index)
-                        "
+                        @change="handleChange($event, item, index)"
                       >
                       </a-checkbox>
                     </div>
@@ -192,7 +190,7 @@
         row-key="id"
         :loading="loading"
         :pagination="pagination"
-        :columns="(cloneColumns as TableColumnData[])"
+        :columns="cloneColumns"
         :data="renderData"
         :bordered="false"
         :size="size"
@@ -211,11 +209,13 @@
           {{ $t(`searchTable.form.status.${record.status}`) }}
           <icon-exclamation-circle v-if="record.status === 'error'" />
         </template>
-        <template #operations>
-          <a-button type="text" size="small">
-            {{ $t('searchTable.columns.operations.view') }}
-          </a-button>
-          <a-button type="text" size="small">
+        <template #operations="{ record }">
+          <a-button
+            type="text"
+            size="small"
+            :loading="loadingDown"
+            @click="downloadFile(record)"
+          >
             {{ $t('searchTable.columns.operations.download') }}
           </a-button>
         </template>
@@ -229,7 +229,7 @@
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
-  import type { TableColumnData } from '@arco-design/web-vue/es/table/interface';
+  import { TableColumnData } from '@arco-design/web-vue/es/table/interface';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
   import { IconExclamationCircle } from '@arco-design/web-vue/es/icon';
@@ -239,6 +239,9 @@
     PolicyRecord,
     PolicyParams,
     CreateEdpPerformancePar,
+    CreateEdpPerformance,
+    DownloadPerformanceLogPar,
+    DownloadPerformanceLog,
   } from '@/api/performance';
   import { Message } from '@arco-design/web-vue';
 
@@ -257,13 +260,14 @@
   };
   const { loading, setLoading } = useLoading(true);
   const { t } = useI18n();
-  const renderData: ref<PolicyRecord[]> = ref([]);
+  const renderData = ref<PolicyRecord[]>([]);
   const formModel = ref(generateFormModel());
   const cloneColumns = ref<Column[]>([]);
   const showColumns = ref<Column[]>([]);
   const size = ref<SizeProps>('medium');
   const showCreateDialog = ref(false);
   const Shell: (string | number)[] = [];
+  const loadingDown = ref(false);
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
@@ -369,10 +373,20 @@
     }, 1000);
   };
 
+  const downloadFile = async (params: DownloadPerformanceLog) => {
+    loadingDown.value = true;
+    try {
+      await DownloadPerformanceLogPar(params);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      loadingDown.value = false;
+    }
+  };
+
   const createTask = async () => {
     setLoading(true);
     try {
-      console.log(createTaskForm);
       const response = await CreateEdpPerformancePar(createTaskForm);
       const responseData = response.data;
       fetchData();
@@ -394,7 +408,6 @@
     setLoading(true);
     try {
       const { data } = await queryPolicyList(params);
-      console.log(data.data);
       //   加载数据
       renderData.value = data.data;
       //   当前页码
