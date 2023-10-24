@@ -92,7 +92,7 @@
               @update:visible="showCreateDialog"
               @ok="createTask"
               @cancel="handleCancel"
-              @before-ok="handleBeforeOk"
+              :okLoading="confirmLoading"
             >
               <a-form :model="createTaskForm">
                 <a-form-item field="source" label="source">
@@ -266,7 +266,7 @@
   const loadingDown = ref(false);
   const storedData = sessionStorage.getItem('userData');
   const userData = ref<UserForm | null>(null);
-
+  const confirmLoading = ref(false);
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
@@ -372,12 +372,6 @@
     showCreateDialog.value = false;
   };
 
-  const handleBeforeOk = (done: any) => {
-    window.setTimeout(() => {
-      done();
-    }, 2000);
-  };
-
   const downloadFile = async (params: DownloadPerformanceLog) => {
     loadingDown.value = true;
     try {
@@ -391,9 +385,9 @@
 
   const createTask = async () => {
     setLoading(true);
+    confirmLoading.value = true;
     try {
-      const response = await CreateEdpPerformancePar(createTaskForm);
-      const responseData = response.data;
+      await CreateEdpPerformancePar(createTaskForm);
       fetchData();
     } catch (error) {
       // 处理错误，例如显示错误消息或记录错误日志
@@ -403,6 +397,7 @@
       createTaskForm.commands = [];
       showCreateDialog.value = false;
       setLoading(false);
+      confirmLoading.value = false;
     }
   };
 

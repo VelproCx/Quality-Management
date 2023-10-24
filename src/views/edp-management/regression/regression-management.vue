@@ -92,7 +92,7 @@
               @update:visible="showCreateDialog"
               @ok="createTask"
               @cancel="handleCancel"
-              loading
+              :okLoading="confirmLoading"
             >
               <a-form :model="createTaskForm">
                 <a-form-item field="source" label="source">
@@ -266,11 +266,12 @@
   const showCreateDialog = ref(false);
   const storedData = sessionStorage.getItem('userData');
   const userData = ref<UserForm | null>(null);
+  const confirmLoading = ref(false);
+
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
   };
-  const loading1 = ref(false);
 
   const pagination = reactive({
     ...basePagination,
@@ -383,11 +384,10 @@
   const createTask = async () => {
     // 页面loading打开
     setLoading(true);
-    loading1.value = !loading1.value;
+    confirmLoading.value = true;
     try {
       // 定义变量接受接口返回值
-      const response = await CreateEdpRegressionPar(createTaskForm);
-      const responseData = response.data;
+      await CreateEdpRegressionPar(createTaskForm);
       fetchData();
     } catch (error) {
       // 处理错误，例如显示错误消息或记录错误日志
@@ -401,7 +401,7 @@
       showCreateDialog.value = false;
       //   页面loading取消
       setLoading(false);
-      loading1.value = false;
+      confirmLoading.value = false;
     }
   };
 
