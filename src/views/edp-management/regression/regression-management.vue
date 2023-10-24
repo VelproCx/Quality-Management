@@ -92,6 +92,7 @@
               @update:visible="showCreateDialog"
               @ok="createTask"
               @cancel="handleCancel"
+              loading
             >
               <a-form :model="createTaskForm">
                 <a-form-item field="source" label="source">
@@ -269,6 +270,7 @@
     current: 1,
     pageSize: 10,
   };
+  const loading1 = ref(false);
 
   const pagination = reactive({
     ...basePagination,
@@ -381,6 +383,7 @@
   const createTask = async () => {
     // 页面loading打开
     setLoading(true);
+    loading1.value = !loading1.value;
     try {
       // 定义变量接受接口返回值
       const response = await CreateEdpRegressionPar(createTaskForm);
@@ -398,6 +401,7 @@
       showCreateDialog.value = false;
       //   页面loading取消
       setLoading(false);
+      loading1.value = false;
     }
   };
 
@@ -448,7 +452,7 @@
   };
 
   const onPageChange = (current: number) => {
-    fetchData({ ...basePagination, current });
+    fetchData({ ...basePagination, current, ...formModel.value });
   };
 
   fetchData();

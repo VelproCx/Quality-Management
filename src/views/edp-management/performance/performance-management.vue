@@ -375,7 +375,7 @@
   const handleBeforeOk = (done: any) => {
     window.setTimeout(() => {
       done();
-    }, 1000);
+    }, 2000);
   };
 
   const downloadFile = async (params: DownloadPerformanceLog) => {
@@ -450,7 +450,7 @@
   };
 
   const onPageChange = (current: number) => {
-    fetchData({ ...basePagination, current });
+    fetchData({ ...basePagination, current, ...formModel.value });
   };
 
   fetchData();
