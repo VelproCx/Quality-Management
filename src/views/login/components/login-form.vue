@@ -121,7 +121,6 @@
         rememberPassword: userInfo.rememberPassword,
       };
       await userStore.login(loginData);
-
       const { redirect, ...othersQuery } = router.currentRoute.value.query;
       router.push({
         name: (redirect as string) || 'users',

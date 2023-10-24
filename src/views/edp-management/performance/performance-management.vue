@@ -85,33 +85,34 @@
             <a-modal
               :visible="showCreateDialog"
               title="Create Task"
+              cancel-text="Cancel"
+              ok-text="Confirm"
+              mask-closable="false"
+              width="600px"
               @update:visible="showCreateDialog"
-              okText="Confirm"
               @ok="createTask"
-              cancelText="Cancel"
               @cancel="handleCancel"
               @before-ok="handleBeforeOk"
-              maskClosable="false"
-              width="600px"
             >
               <a-form :model="createTaskForm">
                 <a-form-item field="source" label="source">
                   <a-input
                     v-model="createTaskForm.source"
                     placeholder="please enter your username..."
+                    disabled
                   />
                 </a-form-item>
                 <a-form-item
                   v-for="(command, index) of createTaskForm.commands"
+                  :key="index"
                   :field="`commands[${index}].value`"
                   :label="`Command-${index}`"
-                  :key="index"
                   :rules="[{ required: true, message: 'Command is required' }]"
                 >
                   <a-textarea v-model="command.value" auto-size />
                   <a-button
-                    @click="handleDelete(index)"
                     :style="{ marginLeft: '10px' }"
+                    @click="handleDelete(index)"
                     >Delete</a-button
                   >
                 </a-form-item>
@@ -237,6 +238,8 @@
     DownloadPerformanceLogPar,
     DownloadPerformanceLog,
   } from '@/api/performance';
+
+  import { UserForm } from '@/api/user';
   import { Message } from '@arco-design/web-vue';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
@@ -260,20 +263,21 @@
   const showColumns = ref<Column[]>([]);
   const size = ref<SizeProps>('medium');
   const showCreateDialog = ref(false);
-  const Shell: (string | number)[] = [];
   const loadingDown = ref(false);
+  const storedData = sessionStorage.getItem('userData');
+  const userData = ref<UserForm | null>(null);
+
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
   };
-
   const pagination = reactive({
     ...basePagination,
   });
 
   //   新建执行任务参数
   const createTaskForm = reactive({
-    source: 'Admin',
+    source: '',
     commands: [{ value: '' }],
   });
   // 定义列表显示密度选项
@@ -353,8 +357,14 @@
   };
 
   const openCreateDialog = () => {
-    createTaskForm.commands = [];
-    showCreateDialog.value = true;
+    if (storedData) {
+      userData.value = JSON.parse(storedData);
+      if (userData.value) {
+        createTaskForm.source = userData.value.name;
+      }
+      createTaskForm.commands = [];
+      showCreateDialog.value = true;
+    }
   };
 
   const handleCancel = () => {
