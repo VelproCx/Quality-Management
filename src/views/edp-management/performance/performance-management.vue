@@ -65,12 +65,6 @@
               </template>
               {{ $t('searchTable.form.search') }}
             </a-button>
-            <!-- <a-button @click="reset">
-              <template #icon>
-                <icon-refresh />
-              </template>
-              {{ $t('searchTable.form.reset') }}
-            </a-button> -->
           </a-space>
         </a-col>
       </a-row>
@@ -359,6 +353,7 @@
   };
 
   const openCreateDialog = () => {
+    createTaskForm.commands = [];
     showCreateDialog.value = true;
   };
 
@@ -425,15 +420,17 @@
   const onSelect = (dateString: string, date: Date) => {
     // console.log('onSelect', dateString, date);
   };
-  const onChange = (
-    [start, end]: [string, string],
-    [startDate, endDate]: [Date, Date]
-  ) => {
-    formModel.value.startTime = start;
-    formModel.value.endTime = end;
-    console.log('onChange: ', start);
+  const onChange = (dateString: string, date: Date) => {
+    if (dateString !== undefined && date !== undefined) {
+      const start = dateString[0];
+      const end = dateString[1];
+      formModel.value.startTime = start;
+      formModel.value.endTime = end;
+    } else {
+      formModel.value.startTime = '';
+      formModel.value.endTime = '';
+    }
   };
-
   // 带查询条件进行数据查询
   const search = () => {
     fetchData({

@@ -13,8 +13,19 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
+                  field="taskId"
+                  :label="$t('searchTable.form.taskId')"
+                >
+                  <a-input
+                    v-model="formModel.taskId"
+                    :placeholder="$t('searchTable.form.taskId.placeholder')"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item
                   field="Source"
-                  :label="$t('searchTable.form.Source')"
+                  :label="$t('searchTable.form.source')"
                 >
                   <a-input
                     v-model="formModel.source"
@@ -39,10 +50,7 @@
                   field="createTime"
                   :label="$t('searchTable.form.createTime')"
                 >
-                  <a-range-picker
-                    v-model="formModel.createdTime"
-                    style="width: 100%"
-                  />
+                  <a-range-picker @change="onChange" @select="onSelect" />
                 </a-form-item>
               </a-col>
             </a-row>
@@ -57,12 +65,6 @@
               </template>
               {{ $t('searchTable.form.search') }}
             </a-button>
-            <!-- <a-button @click="reset">
-              <template #icon>
-                <icon-refresh />
-              </template>
-              {{ $t('searchTable.form.reset') }}
-            </a-button> -->
           </a-space>
         </a-col>
       </a-row>
@@ -211,9 +213,6 @@
         </template>
         <template #operations>
           <a-button type="text" size="small">
-            {{ $t('searchTable.columns.operations.view') }}
-          </a-button>
-          <a-button type="text" size="small">
             {{ $t('searchTable.columns.operations.download') }}
           </a-button>
         </template>
@@ -240,6 +239,7 @@
     CreateEdpRegression,
   } from '@/api/regression';
   import { Message } from '@arco-design/web-vue';
+  import { start } from 'nprogress';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
@@ -247,7 +247,9 @@
   const generateFormModel = () => {
     return {
       source: '',
-      createTime: [],
+      startTime: '',
+      endTime: '',
+      //   createdTime: [],
       status: '',
       taskId: '',
     };
@@ -342,28 +344,37 @@
       value: 'error',
     },
   ]);
+  //   新增一条command
   const handleAdd = () => {
     createTaskForm.commands.push({
       value: '',
     });
   };
+
+  //   删除command
   const handleDelete = (index: number) => {
     createTaskForm.commands.splice(index, 1);
   };
 
+  // 新增任务弹出窗口
   const openCreateDialog = () => {
     createTaskForm.commands = [];
     showCreateDialog.value = true;
   };
 
+  // 新增任务窗口Cancel事件
   const handleCancel = () => {
+    // 清空commands数组，并且关闭弹窗
     createTaskForm.commands = [];
     showCreateDialog.value = false;
   };
 
+  // 创建regression任务请求
   const createTask = async () => {
+    // 页面loading打开
     setLoading(true);
     try {
+      // 定义变量接受接口返回值
       const response = await CreateEdpRegressionPar(createTaskForm);
       const responseData = response.data;
       fetchData();
@@ -371,9 +382,13 @@
       // 处理错误，例如显示错误消息或记录错误日志
       Message.error(t('createTask.form.status.fail'));
     } finally {
+      // 处理正常，弹窗显示新增成功
       Message.success(t('createTask.form.status.success'));
+      //   关闭窗口，清空command数组
       createTaskForm.commands = [];
+      //   关闭窗口
       showCreateDialog.value = false;
+      //   页面loading取消
       setLoading(false);
     }
   };
@@ -398,6 +413,44 @@
     } finally {
       setLoading(false);
     }
+  };
+  const onSelect = (dateString: string, date: Date) => {
+    console.log('onSelect', dateString, date);
+  };
+
+  //   const onChange = (
+  //     [start, end]: [string, string],
+  //     [startDate, endDate]: [Date, Date]
+  //   ) => {
+  //     console.log('Received start and end:', start, end);
+  //     if (start !== undefined && end !== undefined) {
+  //       formModel.value.startTime = start;
+  //       formModel.value.endTime = end;
+  //     } else {
+  //       // 在清除操作时，将startTime和endTime设置为空字符串或其他默认值
+  //       formModel.value.startTime = '';
+  //       formModel.value.endTime = '';
+  //     }
+  //     console.log('onChange: ', start);
+  //   };
+
+  const onChange = (dateString: string, date: Date) => {
+    if (dateString !== undefined && date !== undefined) {
+      const start = dateString[0];
+      const end = dateString[1];
+      formModel.value.startTime = start;
+      formModel.value.endTime = end;
+    } else {
+      formModel.value.startTime = '';
+      formModel.value.endTime = '';
+    }
+
+    console.log(dateString, date);
+  };
+
+  const onCancel = () => {
+    formModel.value.startTime = '';
+    formModel.value.endTime = '';
   };
 
   // 带查询条件进行数据查询

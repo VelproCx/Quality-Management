@@ -52,7 +52,6 @@
               :visible="showCreateDialog"
               title="Create User"
               ok-text="Confirm"
-              mask-closable="false"
               @cancel-text="Cancel"
               @update:visible="showCreateDialog"
               @ok="createUser"

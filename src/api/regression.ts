@@ -47,3 +47,43 @@ export function CreateEdpRegressionPar(data: CreateEdpRegression) {
     data
   );
 }
+
+export interface DownloadRegressionLog {
+  taskId: string;
+}
+
+export interface DownloadRegressionLogRes {
+  data: [];
+}
+
+export function DownloadRegressionLogPar(params: DownloadRegressionLog) {
+  return axios.get<DownloadRegressionLogRes>(
+    '/api/edp_regression_list/download_edp_log',
+    {
+      params,
+      paramsSerializer: (obj) => {
+        return qs.stringify(obj);
+      },
+    }
+  );
+}
+
+export interface DownloadRegressionRep {
+  taskId: string;
+}
+
+export interface DownloadRegressionRepRes {
+  data: [];
+}
+
+export function DownloadRegressionRepPar(params: DownloadRegressionRep) {
+  return axios.get<DownloadRegressionRepRes>(
+    '/api/edp_regression_list/download_edp_report',
+    {
+      params,
+      paramsSerializer: (obj) => {
+        return qs.stringify(obj);
+      },
+    }
+  );
+}

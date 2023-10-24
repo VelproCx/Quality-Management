@@ -3,7 +3,10 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Message, Modal } from '@arco-design/web-vue';
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
+import { clearToken } from '@/utils/auth';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 export interface HttpResponse<T = unknown> {
   status: number;
   msg: string;
@@ -36,7 +39,6 @@ axios.interceptors.request.use(
   }
 );
 
-// add response interceptors
 axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
     const res = response;
@@ -58,17 +60,31 @@ axios.interceptors.response.use(
           okText: 'Re-Login',
           async onOk() {
             const userStore = useUserStore();
-
             await userStore.logout();
             window.location.reload();
+            // You can keep this line if HTTP 422 should also redirect
+            router.push({ name: 'login' });
           },
         });
       }
-      return Promise.reject(new Error(res.status || 'Error'));
+      return Promise.reject(new Error(res.status));
     }
     return res;
   },
   (error) => {
+    if (error.response.status === 401 || error.response.status === 422) {
+      // 2. 清除本地存储中的 token
+      clearToken();
+
+      // 3. 将用户的认证状态标记为未登录
+      //   setUserAsNotAuthenticated();
+
+      // 4. 使用路由器重定向到登录页面
+      // Keep this line if you want HTTP 401 to redirect
+      router.push({ name: 'login' });
+
+      return Promise.reject(error);
+    }
     Message.error({
       content: error.msg || 'Request Error',
       duration: 5 * 1000,

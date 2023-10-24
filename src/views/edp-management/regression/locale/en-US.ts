@@ -2,14 +2,12 @@ export default {
   'menu.edp.management': 'EDP Management',
   'menu.edp.regression': 'Regression',
 
-  'menu.edp.performance': 'Performanc',
-
   'menu.task.searchTable': 'Search Table',
 
-  'searchTable.form.Source': 'Source',
-  'searchTable.form.Source.placeholder': 'Please enter source',
+  'searchTable.form.source': 'Source',
+  'searchTable.form.source.placeholder': 'Please enter source',
 
-  'searchTable.form.creatTime': 'Create Time',
+  'searchTable.form.createTime': 'Create Time',
 
   'searchTable.form.status': 'status',
   'searchTable.form.status.progressing': 'Progressing',
@@ -18,7 +16,6 @@ export default {
   'searchTable.form.selectDefault': 'Please select status',
 
   'searchTable.form.search': 'Search',
-  'searchTable.form.reset': 'Reset',
 
   'searchTable.operation.create': 'Create',
 

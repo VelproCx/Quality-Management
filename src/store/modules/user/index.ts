@@ -16,7 +16,7 @@ const useUserStore = defineStore('user', {
     email: undefined,
     id: undefined,
     status: undefined,
-    createdTime: undefined,
+    createTime: undefined,
     updateTime: undefined,
     isDelete: undefined,
     role: '',
