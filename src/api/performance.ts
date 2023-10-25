@@ -53,8 +53,8 @@ export interface DownloadPerformanceLogRes {
   data: Blob;
 }
 
-export function DownloadPerformanceLogPar(data: DownloadPerformanceLog) {
-  return axios.post<DownloadPerformanceLogRes>(
+export function DownloadPerformanceLogPar(data: any) {
+  return axios.post<DownloadPerformanceLogRes, any>(
     '/api/edp_performance_list/download_performance_logs',
     data
   );

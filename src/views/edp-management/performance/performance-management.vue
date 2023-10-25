@@ -208,7 +208,7 @@
           <a-button
             type="text"
             size="small"
-            :loading="loadingDown"
+            :loading="record.loadingDown"
             @click="downloadLogFile(record)"
           >
             {{ $t('searchTable.columns.operations.download') }}
@@ -253,6 +253,7 @@
       //   createdTime: [],
       status: '',
       taskId: '',
+      loadingDown: false,
     };
   };
   const { loading, setLoading } = useLoading(true);
@@ -263,7 +264,7 @@
   const showColumns = ref<Column[]>([]);
   const size = ref<SizeProps>('medium');
   const showCreateDialog = ref(false);
-  const loadingDown = ref(false);
+  //   const loadingDown = ref(false);
   const storedData = sessionStorage.getItem('userData');
   const userData = ref<UserForm | null>(null);
   const confirmLoading = ref(false);
@@ -372,8 +373,8 @@
     showCreateDialog.value = false;
   };
 
-  const downloadLogFile = async (params: DownloadPerformanceLog) => {
-    loadingDown.value = true;
+  const downloadLogFile = async (params: any) => {
+    params.loadingDown = true;
     try {
       const response = await DownloadPerformanceLogPar(params);
 
@@ -382,7 +383,7 @@
         type: response.headers['content-type'],
       });
 
-      let fileExt = 'txt';
+      let fileExt: string | undefined = 'txt';
       if (response.headers['content-disposition']) {
         const matches = /filename="(.+\.\w+)"/.exec(
           response.headers['content-disposition']
@@ -391,10 +392,7 @@
           fileExt = matches[1].split('.').pop();
         }
       }
-
       const fileName = `${params.taskId}.${fileExt}`;
-
-      // 使用正确的函数名称 downloadFile，而不是 download
       downloadFile(
         window.URL.createObjectURL(blob),
         fileName,
@@ -402,6 +400,8 @@
       );
     } catch (err) {
       console.error('Download request failed.');
+    } finally {
+      params.loadingDown = false;
     }
   };
 
