@@ -209,7 +209,7 @@
             type="text"
             size="small"
             :loading="loadingDown"
-            @click="downloadFile(record)"
+            @click="downloadLogFile(record)"
           >
             {{ $t('searchTable.columns.operations.download') }}
           </a-button>
@@ -238,7 +238,7 @@
     DownloadPerformanceLogPar,
     DownloadPerformanceLog,
   } from '@/api/performance';
-
+  import { downloadFile } from '@/utils/download';
   import { UserForm } from '@/api/user';
   import { Message } from '@arco-design/web-vue';
 
@@ -372,14 +372,36 @@
     showCreateDialog.value = false;
   };
 
-  const downloadFile = async (params: DownloadPerformanceLog) => {
+  const downloadLogFile = async (params: DownloadPerformanceLog) => {
     loadingDown.value = true;
     try {
-      await DownloadPerformanceLogPar(params);
+      const response = await DownloadPerformanceLogPar(params);
+
+      // 使用 response.data 获取文件内容，并使用 response.headers['content-type'] 获取文件类型
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
+
+      let fileExt = 'txt';
+      if (response.headers['content-disposition']) {
+        const matches = /filename="(.+\.\w+)"/.exec(
+          response.headers['content-disposition']
+        );
+        if (matches) {
+          fileExt = matches[1].split('.').pop();
+        }
+      }
+
+      const fileName = `${params.taskId}.${fileExt}`;
+
+      // 使用正确的函数名称 downloadFile，而不是 download
+      downloadFile(
+        window.URL.createObjectURL(blob),
+        fileName,
+        response.headers['content-type']
+      );
     } catch (err) {
-      console.log(err);
-    } finally {
-      loadingDown.value = false;
+      console.error('Download request failed.');
     }
   };
 

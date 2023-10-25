@@ -50,17 +50,12 @@ export interface DownloadPerformanceLog {
 }
 
 export interface DownloadPerformanceLogRes {
-  data: [];
+  data: Blob;
 }
 
-export function DownloadPerformanceLogPar(params: DownloadPerformanceLog) {
-  return axios.get<DownloadPerformanceLogRes>(
+export function DownloadPerformanceLogPar(data: DownloadPerformanceLog) {
+  return axios.post<DownloadPerformanceLogRes>(
     '/api/edp_performance_list/download_performance_logs',
-    {
-      params,
-      paramsSerializer: (obj) => {
-        return qs.stringify(obj);
-      },
-    }
+    data
   );
 }

@@ -213,8 +213,13 @@
             </template>
           </a-popover>
         </template>
-        <template #operations>
-          <a-button type="text" size="small">
+        <template #operations="{ record }">
+          <a-button
+            type="text"
+            size="small"
+            :loading="loadingDown"
+            @click="downloadFile(record)"
+          >
             {{ $t('searchTable.columns.operations.download') }}
           </a-button>
         </template>
@@ -239,9 +244,12 @@
     PolicyParams,
     CreateEdpRegressionPar,
     CreateEdpRegression,
+    DownloadRegressionLogPar,
+    DownloadRegressionLog,
   } from '@/api/regression';
   import { Message } from '@arco-design/web-vue';
   import { UserForm } from '@/api/user';
+  import downloadZipFile from '@/utils/download';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
@@ -380,26 +388,55 @@
     showCreateDialog.value = false;
   };
 
-  // 创建regression任务请求
+  const downloadFile = async (params: DownloadRegressionLog) => {
+    // loadingDown.value = true;
+    try {
+      const response = await DownloadRegressionLogPar(params);
+      const blob = new Blob([response.data], {
+        type: 'application/zip',
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const fileName = `${params.taskId}.zip`;
+      downloadZipFile(url, fileName);
+    } catch (err) {
+      console.error('Download request failed.');
+    } finally {
+      //   loadingDown.value = false;
+    }
+  };
+
   const createTask = async () => {
-    // 页面loading打开
     setLoading(true);
     confirmLoading.value = true;
+
     try {
-      // 定义变量接受接口返回值
-      await CreateEdpRegressionPar(createTaskForm);
+      const response = await fetch('your_api_url_here', {
+        method: 'POST', // 适应您的请求方法
+        body: JSON.stringify(createTaskForm), // 根据您的请求数据进行更改
+        headers: {
+          'Content-Type': 'application/json', // 根据您的请求头进行更改
+        },
+      });
+
+      if (!response.ok) {
+        // 处理请求失败的情况
+        Message.error(t('createTask.form.status.fail'));
+        return;
+      }
+
+      // 使用text()、json()、blob()等方法来处理响应数据
+      const responseData = await response.json(); // 例如，如果响应是JSON数据
+
+      // 处理成功的情况
+      Message.success(t('createTask.form.status.success'));
       fetchData();
+      createTaskForm.commands = [];
+      showCreateDialog.value = false;
     } catch (error) {
-      // 处理错误，例如显示错误消息或记录错误日志
+      // 处理错误
       Message.error(t('createTask.form.status.fail'));
     } finally {
-      // 处理正常，弹窗显示新增成功
-      Message.success(t('createTask.form.status.success'));
-      //   关闭窗口，清空command数组
-      createTaskForm.commands = [];
-      //   关闭窗口
-      showCreateDialog.value = false;
-      //   页面loading取消
       setLoading(false);
       confirmLoading.value = false;
     }

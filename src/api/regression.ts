@@ -53,7 +53,7 @@ export interface DownloadRegressionLog {
 }
 
 export interface DownloadRegressionLogRes {
-  data: [];
+  data: Blob;
 }
 
 export function DownloadRegressionLogPar(params: DownloadRegressionLog) {
@@ -64,6 +64,7 @@ export function DownloadRegressionLogPar(params: DownloadRegressionLog) {
       paramsSerializer: (obj) => {
         return qs.stringify(obj);
       },
+      responseType: 'blob',
     }
   );
 }
