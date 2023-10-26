@@ -465,34 +465,16 @@
   const createTask = async () => {
     setLoading(true);
     confirmLoading.value = true;
-
     try {
-      const response = await fetch('your_api_url_here', {
-        method: 'POST', // 适应您的请求方法
-        body: JSON.stringify(createTaskForm), // 根据您的请求数据进行更改
-        headers: {
-          'Content-Type': 'application/json', // 根据您的请求头进行更改
-        },
-      });
-
-      if (!response.ok) {
-        // 处理请求失败的情况
-        Message.error(t('createTask.form.status.fail'));
-        return;
-      }
-
-      // 使用text()、json()、blob()等方法来处理响应数据
-      const responseData = await response.json(); // 例如，如果响应是JSON数据
-
-      // 处理成功的情况
-      Message.success(t('createTask.form.status.success'));
+      await CreateEdpRegressionPar(createTaskForm);
       fetchData();
-      createTaskForm.commands = [];
-      showCreateDialog.value = false;
     } catch (error) {
-      // 处理错误
+      // 处理错误，例如显示错误消息或记录错误日志
       Message.error(t('createTask.form.status.fail'));
     } finally {
+      Message.success(t('createTask.form.status.success'));
+      createTaskForm.commands = [];
+      showCreateDialog.value = false;
       setLoading(false);
       confirmLoading.value = false;
     }
