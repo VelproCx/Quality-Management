@@ -8,18 +8,13 @@ export default {
   'searchTable.form.Taskname': '任务名称',
   'searchTable.form.Taskname.placeholder': '请输入任务名称',
 
-  'searchTable.form.createTime': '创建时间',
-
-  'searchTable.form.status': '状态',
   'searchTable.form.status.planning': '计划中',
   'searchTable.form.status.progressing': '进行中',
   'searchTable.form.status.completed': '已完成',
   'searchTable.form.selectDefault': '请选择状态',
 
-  'searchTable.form.search': '查询',
   'searchTable.form.reset': '重置',
 
-  'searchTable.operation.create': '新建任务',
   'searchTable.operation.import': '导入',
 
   'searchTable.operation.download': '导出',

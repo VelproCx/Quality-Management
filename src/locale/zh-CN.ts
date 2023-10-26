@@ -30,8 +30,6 @@ export default {
   'navbar.docs': '文档中心',
   'navbar.action.locale': '切换为中文',
   'menu.edp.performance': '压力测试',
-  'menu.edp.regression': '回归测试',
-  'menu.edp.fullstock': '全股测试',
   'menu.edp.management': 'EDP 管理',
   'menu.edp.case': '测试用例',
 

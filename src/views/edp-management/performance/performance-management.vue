@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['menu.edp', 'menu.edp.performance']" />
-    <a-card class="general-card" :title="$t('menu.task.searchTable')">
+    <a-card class="general-card" :title="$t('menu.edp.searchTable')">
       <a-row>
         <a-col :flex="1">
           <a-form
@@ -29,7 +29,7 @@
                 >
                   <a-input
                     v-model="formModel.source"
-                    :placeholder="$t('searchTable.form.Source.placeholder')"
+                    :placeholder="$t('searchTable.form.source.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -212,7 +212,7 @@
             :disabled="record.status !== 'completed'"
             @click="downloadLogFile(record)"
           >
-            {{ $t('searchTable.columns.operations.download') }}
+            {{ $t('searchTable.columns.operations.downloadLog') }}
           </a-button>
         </template>
       </a-table>

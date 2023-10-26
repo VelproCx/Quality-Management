@@ -29,7 +29,7 @@
                 >
                   <a-input
                     v-model="formModel.source"
-                    :placeholder="$t('searchTable.form.Source.placeholder')"
+                    :placeholder="$t('searchTable.form.source.placeholder')"
                   />
                 </a-form-item>
               </a-col>
