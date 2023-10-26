@@ -4,7 +4,9 @@ import localeTask from '@/views/task-management/my-task/locale/zh-CN';
 import localeWorkplace from '@/views/dashboard/workplace/locale/zh-CN';
 import localEdpRegression from '@/views/edp-management/regression/locale/zh-CN';
 import localEdpPerformance from '@/views/edp-management/performance/locale/zh-CN';
-import localEdpFullstock from '@/views/edp-management/performance/locale/zh-CN';
+import localEdpFullstock from '@/views/edp-management/fullstock/locale/zh-CN';
+import localEdpSmoke from '@/views/edp-management/smoke/locale/zh-CN';
+import localEdpCase from '@/views/edp-management/case/locale/zh-CN';
 import localRolxRegression from '@/views/rolx-management/regression/locale/en-US';
 import localRolxPerformance from '@/views/rolx-management/performance/locale/en-US';
 import localRolxFullstock from '@/views/rolx-management/fullstock/locale/en-US';
@@ -31,6 +33,7 @@ export default {
   'menu.edp.regression': '回归测试',
   'menu.edp.fullstock': '全股测试',
   'menu.edp.management': 'EDP 管理',
+  'menu.edp.case': '测试用例',
 
   ...localeSettings,
   ...localeMessageBox,
@@ -40,6 +43,8 @@ export default {
   ...localEdpRegression,
   ...localEdpPerformance,
   ...localEdpFullstock,
+  ...localEdpSmoke,
+  ...localEdpCase,
   ...localRolxRegression,
   ...localRolxPerformance,
   ...localRolxFullstock,

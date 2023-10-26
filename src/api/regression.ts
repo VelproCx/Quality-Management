@@ -56,16 +56,10 @@ export interface DownloadRegressionLogRes {
   data: Blob;
 }
 
-export function DownloadRegressionLogPar(params: DownloadRegressionLog) {
-  return axios.get<DownloadRegressionLogRes>(
+export function DownloadRegressionLogPar(data: any) {
+  return axios.post<DownloadRegressionLogRes, any>(
     '/api/edp_regression_list/download_edp_log',
-    {
-      params,
-      paramsSerializer: (obj) => {
-        return qs.stringify(obj);
-      },
-      responseType: 'blob',
-    }
+    data
   );
 }
 
@@ -74,17 +68,12 @@ export interface DownloadRegressionRep {
 }
 
 export interface DownloadRegressionRepRes {
-  data: [];
+  data: Blob;
 }
 
-export function DownloadRegressionRepPar(params: DownloadRegressionRep) {
-  return axios.get<DownloadRegressionRepRes>(
+export function DownloadRegressionRepPar(data: any) {
+  return axios.post<DownloadRegressionRepRes, any>(
     '/api/edp_regression_list/download_edp_report',
-    {
-      params,
-      paramsSerializer: (obj) => {
-        return qs.stringify(obj);
-      },
-    }
+    data
   );
 }

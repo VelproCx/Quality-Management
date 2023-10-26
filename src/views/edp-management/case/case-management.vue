@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.edp', 'menu.edp.regression']" />
-    <a-card class="general-card" :title="$t('menu.edp.searchTable')">
+    <Breadcrumb :items="['menu.edp', 'menu.edp.case']" />
+    <a-card class="general-card" :title="$t('menu.task.searchTable')">
       <a-row>
         <a-col :flex="1">
           <a-form
@@ -13,12 +13,12 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
-                  field="taskId"
-                  :label="$t('searchTable.form.taskId')"
+                  field="caseName"
+                  :label="$t('searchTable.form.caseName')"
                 >
                   <a-input
-                    v-model="formModel.taskId"
-                    :placeholder="$t('searchTable.form.taskId.placeholder')"
+                    v-model="formModel.caseName"
+                    :placeholder="$t('searchTable.form.caseName.placeholder')"
                   />
                 </a-form-item>
               </a-col>
@@ -31,26 +31,6 @@
                     v-model="formModel.source"
                     :placeholder="$t('searchTable.form.Source.placeholder')"
                   />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="status"
-                  :label="$t('searchTable.form.status')"
-                >
-                  <a-select
-                    v-model="formModel.status"
-                    :options="statusOptions"
-                    :placeholder="$t('searchTable.form.selectDefault')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item
-                  field="createTime"
-                  :label="$t('searchTable.form.createTime')"
-                >
-                  <a-range-picker @change="onChange" @select="onSelect" />
                 </a-form-item>
               </a-col>
             </a-row>
@@ -85,8 +65,8 @@
             <a-modal
               :visible="showCreateDialog"
               title="Create Task"
-              ok-text="Confirm"
               cancel-text="Cancel"
+              ok-text="Confirm"
               mask-closable="false"
               width="600px"
               @update:visible="showCreateDialog"
@@ -194,43 +174,9 @@
         <template #index="{ rowIndex }">
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
-        <template #status="{ record }">
-          <span v-if="record.status === 'completed'" class="circle"></span>
-          <span
-            v-if="record.status === 'progressing'"
-            class="circle pass"
-          ></span>
-          <span v-if="record.status === 'error'" class="circle err"></span>
-          {{ $t(`searchTable.form.status.${record.status}`) }}
-          <span v-if="record.status === 'error'" class="circle err"></span>
-          <a-popover position="top">
-            <icon-exclamation-circle
-              v-if="record.status === 'error'"
-              :style="{ fontSize: '24px', color: 'red', verticalAlign: '-7px' }"
-            />
-            <template #content>
-              <p>{{ record.output }}</p>
-            </template>
-          </a-popover>
-        </template>
         <template #operations="{ record }">
-          <a-button
-            type="text"
-            size="small"
-            :loading="record.loadingDown"
-            :disabled="record.status !== 'completed'"
-            @click="downloadLogFile(record)"
-          >
-            {{ $t('searchTable.columns.operations.downloadLog') }}
-          </a-button>
-          <a-button
-            type="text"
-            size="small"
-            :loading="record.loadingDown"
-            :disabled="record.status !== 'completed'"
-            @click="downloadReportFile(record)"
-          >
-            {{ $t('searchTable.columns.operations.downloadReport') }}
+          <a-button type="text" size="small" @click="editCase(record)">
+            {{ $t('searchTable.columns.operations.editCase') }}
           </a-button>
         </template>
       </a-table>
@@ -246,33 +192,27 @@
   import { TableColumnData } from '@arco-design/web-vue/es/table/interface';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
-  import { Pagination } from '@/types/global';
   import { IconExclamationCircle } from '@arco-design/web-vue/es/icon';
+  import { Pagination } from '@/types/global';
   import {
     queryPolicyList,
     PolicyRecord,
     PolicyParams,
-    CreateEdpRegressionPar,
-    CreateEdpRegression,
-    DownloadRegressionLogPar,
-    DownloadRegressionLog,
-    DownloadRegressionRepPar,
-  } from '@/api/regression';
-  import { downloadFile } from '@/utils/download';
-  import { Message } from '@arco-design/web-vue';
+    CreateEdpCasePar,
+    CreateEdpCase,
+    DownloadCaseLogPar,
+    DownloadCaseLog,
+  } from '@/api/case';
   import { UserForm } from '@/api/user';
+  import { Message } from '@arco-design/web-vue';
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
 
   const generateFormModel = () => {
     return {
+      caseName: '',
       source: '',
-      startTime: '',
-      endTime: '',
-      //   createdTime: [],
-      status: '',
-      taskId: '',
       loadingDown: false,
     };
   };
@@ -287,19 +227,17 @@
   const storedData = sessionStorage.getItem('userData');
   const userData = ref<UserForm | null>(null);
   const confirmLoading = ref(false);
-
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
   };
-
   const pagination = reactive({
     ...basePagination,
   });
 
   //   新建执行任务参数
   const createTaskForm = reactive({
-    source: 'Admin',
+    source: '',
     commands: [{ value: '' }],
   });
   // 定义列表显示密度选项
@@ -329,13 +267,13 @@
       slotName: 'index',
     },
     {
-      title: t('searchTable.columns.taskId'),
-      dataIndex: 'taskId',
-      slotName: 'taskId',
+      title: t('searchTable.columns.caseName'),
+      dataIndex: 'caseName',
+      slotName: 'caseName',
     },
     {
-      title: t('searchTable.columns.createTime'),
-      dataIndex: 'createTime',
+      title: t('searchTable.columns.updateTime'),
+      dataIndex: 'updateTime',
     },
 
     {
@@ -343,45 +281,21 @@
       dataIndex: 'source',
     },
     {
-      title: t('searchTable.columns.status'),
-      dataIndex: 'status',
-      slotName: 'status',
-    },
-
-    {
       title: t('searchTable.columns.operations'),
       dataIndex: 'operations',
       slotName: 'operations',
     },
   ]);
-  // 定义状态项
-  const statusOptions = computed<SelectOptionData[]>(() => [
-    {
-      label: t('searchTable.form.status.progressing'),
-      value: 'progressing',
-    },
-    {
-      label: t('searchTable.form.status.completed'),
-      value: 'completed',
-    },
-    {
-      label: t('searchTable.form.status.error'),
-      value: 'error',
-    },
-  ]);
-  //   新增一条command
+
   const handleAdd = () => {
     createTaskForm.commands.push({
       value: '',
     });
   };
-
-  //   删除command
   const handleDelete = (index: number) => {
     createTaskForm.commands.splice(index, 1);
   };
 
-  // 新增任务弹出窗口
   const openCreateDialog = () => {
     if (storedData) {
       userData.value = JSON.parse(storedData);
@@ -393,106 +307,24 @@
     }
   };
 
-  // 新增任务窗口Cancel事件
   const handleCancel = () => {
-    // 清空commands数组，并且关闭弹窗
     createTaskForm.commands = [];
     showCreateDialog.value = false;
-  };
-  // 下载日志
-  const downloadLogFile = async (params: any) => {
-    params.loadingDown = true;
-    try {
-      const response = await DownloadRegressionLogPar(params);
-      const blob = new Blob([response.data], {
-        type: response.headers['content-type'],
-      });
-
-      let fileExt: string | undefined = 'txt';
-      if (response.headers['content-disposition']) {
-        const matches = /filename="(.+\.\w+)"/.exec(
-          response.headers['content-disposition']
-        );
-        if (matches) {
-          fileExt = matches[1].split('.').pop();
-        }
-      }
-      const fileName = `${params.taskId}.${fileExt}`;
-      downloadFile(
-        window.URL.createObjectURL(blob),
-        fileName,
-        response.headers['content-type']
-      );
-    } catch (err) {
-      console.error('Download request failed.');
-    } finally {
-      params.loadingDown = false;
-    }
-  };
-  // 下载报告
-  const downloadReportFile = async (params: any) => {
-    params.loadingDown = true;
-    try {
-      const response = await DownloadRegressionRepPar(params);
-      //   将从后端获取的二进制数据作为 Blob 对象存储
-      const blob = new Blob([response.data], {
-        type: response.headers['content-type'],
-      });
-      // 定义文件类型
-      let fileExt: string | undefined = 'txt';
-      if (response.headers['content-disposition']) {
-        const matches = /filename="(.+\.\w+)"/.exec(
-          response.headers['content-disposition']
-        );
-        if (matches) {
-          fileExt = matches[1].split('.').pop();
-        }
-      }
-      const fileName = `${params.taskId}.${fileExt}`;
-      //   调用公共函数下载文件
-      downloadFile(
-        window.URL.createObjectURL(blob),
-        fileName,
-        response.headers['content-type']
-      );
-    } catch (err) {
-      console.error('Download request failed.');
-    } finally {
-      params.loadingDown = false;
-    }
   };
 
   const createTask = async () => {
     setLoading(true);
     confirmLoading.value = true;
-
     try {
-      const response = await fetch('your_api_url_here', {
-        method: 'POST', // 适应您的请求方法
-        body: JSON.stringify(createTaskForm), // 根据您的请求数据进行更改
-        headers: {
-          'Content-Type': 'application/json', // 根据您的请求头进行更改
-        },
-      });
-
-      if (!response.ok) {
-        // 处理请求失败的情况
-        Message.error(t('createTask.form.status.fail'));
-        return;
-      }
-
-      // 使用text()、json()、blob()等方法来处理响应数据
-      const responseData = await response.json(); // 例如，如果响应是JSON数据
-
-      // 处理成功的情况
-      Message.success(t('createTask.form.status.success'));
+      await CreateEdpCasePar(createTaskForm);
       fetchData();
-      createTaskForm.commands = [];
-      showCreateDialog.value = false;
     } catch (error) {
-      // 处理错误
+      // 处理错误，例如显示错误消息或记录错误日志
       Message.error(t('createTask.form.status.fail'));
     } finally {
+      Message.success(t('createTask.form.status.success'));
+      createTaskForm.commands = [];
+      showCreateDialog.value = false;
       setLoading(false);
       confirmLoading.value = false;
     }
@@ -513,26 +345,9 @@
       pagination.total = data.data.length;
     } catch (err) {
       //   Message.error('请求失败，请稍后重试');
-      Message.error('Loading Error');
+      //   Message.error('Loading Error');
     } finally {
       setLoading(false);
-    }
-  };
-  const onSelect = (dateString: string, date: Date) => {
-    console.log('onSelect', dateString, date);
-  };
-
-  // 日期筛选
-  const onChange = (dateString: string, date: Date) => {
-    // 判断传入的参数是否为undefined,true则清空formModel的值，false则赋值
-    if (dateString !== undefined && date !== undefined) {
-      const start = dateString[0];
-      const end = dateString[1];
-      formModel.value.startTime = start;
-      formModel.value.endTime = end;
-    } else {
-      formModel.value.startTime = '';
-      formModel.value.endTime = '';
     }
   };
 
@@ -549,10 +364,7 @@
   };
 
   fetchData();
-  //   const reset = () => {
-  //     formModel.value = generateFormModel();
-  //   };
-  // 选择显示列表密度
+
   const handleSelectDensity = (
     val: string | number | Record<string, any> | undefined,
     e: Event
@@ -623,7 +435,7 @@
 
 <script lang="ts">
   export default {
-    name: 'regression',
+    name: 'case',
   };
 </script>
 

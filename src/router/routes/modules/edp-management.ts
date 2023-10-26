@@ -56,6 +56,17 @@ const EDPMANAGEMENT: AppRouteRecordRaw = {
         roles: ['*'],
       },
     },
+    {
+      path: 'edp-case',
+      name: 'edp-case',
+      component: () =>
+        import('@/views/edp-management/case/case-management.vue'),
+      meta: {
+        locale: 'menu.edp.case',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
 

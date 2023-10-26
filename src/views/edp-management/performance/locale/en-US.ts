@@ -21,7 +21,8 @@ export default {
   'searchTable.operation.create': 'Create',
   'searchTable.operation.import': 'Import',
 
-  'searchTable.operation.download': 'Download',
+  'searchTable.operation.downloadLog': 'Download Logs',
+  'searchTable.operation.downloadReport': 'Download Report',
   'searchTable.actions.refresh': 'Refresh',
   'searchTable.actions.density': 'Density',
   // size

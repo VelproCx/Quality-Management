@@ -6,6 +6,7 @@ import localEdpRegression from '@/views/edp-management/regression/locale/en-US';
 import localEdpPerformance from '@/views/edp-management/performance/locale/en-US';
 import localEdpFullstock from '@/views/edp-management/fullstock/locale/en-US';
 import localEdpSmoke from '@/views/edp-management/smoke/locale/en-US';
+import localEdpCase from '@/views/edp-management/case/locale/en-US';
 import localRolxRegression from '@/views/rolx-management/regression/locale/en-US';
 import localRolxPerformance from '@/views/rolx-management/performance/locale/en-US';
 import localRolxFullstock from '@/views/rolx-management/fullstock/locale/en-US';
@@ -40,6 +41,7 @@ export default {
   ...localEdpRegression,
   ...localEdpPerformance,
   ...localEdpFullstock,
+  ...localEdpCase,
   ...localRolxRegression,
   ...localRolxPerformance,
   ...localRolxFullstock,
