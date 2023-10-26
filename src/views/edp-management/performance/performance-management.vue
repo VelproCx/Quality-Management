@@ -209,6 +209,7 @@
             type="text"
             size="small"
             :loading="record.loadingDown"
+            :disabled="record.status !== 'progressing'"
             @click="downloadLogFile(record)"
           >
             {{ $t('searchTable.columns.operations.download') }}
@@ -438,7 +439,7 @@
       pagination.total = data.data.length;
     } catch (err) {
       //   Message.error('请求失败，请稍后重试');
-      Message.error('Loading Error');
+      //   Message.error('Loading Error');
     } finally {
       setLoading(false);
     }

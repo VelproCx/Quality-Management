@@ -86,7 +86,7 @@ axios.interceptors.response.use(
       return Promise.reject(error);
     }
     Message.error({
-      content: error.msg || 'Request Error',
+      content: error.msg || '业务繁忙',
       duration: 5 * 1000,
     });
     return Promise.reject(error);
