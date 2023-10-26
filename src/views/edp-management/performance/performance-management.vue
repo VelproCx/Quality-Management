@@ -209,7 +209,7 @@
             type="text"
             size="small"
             :loading="record.loadingDown"
-            :disabled="record.status !== 'progressing'"
+            :disabled="record.status !== 'completed'"
             @click="downloadLogFile(record)"
           >
             {{ $t('searchTable.columns.operations.download') }}
