@@ -4,6 +4,7 @@ import qs from 'query-string';
 export interface PolicyRecord {
   caseName: string;
   source: string;
+  updateTime: string;
 }
 
 export interface PolicyParams extends Partial<PolicyRecord> {

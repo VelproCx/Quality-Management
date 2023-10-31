@@ -24,4 +24,6 @@ export default {
   'searchTable.columns.source': 'Source',
 
   // createTable
+
+  'searchTable.columns.operations.editCase': 'Edit',
 };

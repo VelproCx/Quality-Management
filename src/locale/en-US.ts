@@ -23,6 +23,7 @@ export default {
   'menu.result': 'Result',
   'menu.user': 'User Management',
   'menu.task.management': 'Task Management',
+  'menu.edp.management': 'EDP Management',
   'menu.exception': 'Exception',
   'menu.form': 'Form',
   'menu.profile': 'Profile',

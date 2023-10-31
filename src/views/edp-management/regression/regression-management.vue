@@ -202,7 +202,6 @@
           ></span>
           <span v-if="record.status === 'error'" class="circle err"></span>
           {{ $t(`searchTable.form.status.${record.status}`) }}
-          <span v-if="record.status === 'error'" class="circle err"></span>
           <a-popover position="top">
             <icon-exclamation-circle
               v-if="record.status === 'error'"
