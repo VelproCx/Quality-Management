@@ -239,7 +239,7 @@
     DownloadPerformanceLogPar,
     DownloadPerformanceLog,
   } from '@/api/performance';
-  import { downloadFile } from '@/utils/download';
+  import { downloadBlob } from '@/utils/download';
   import { UserForm } from '@/api/user';
   import { Message } from '@arco-design/web-vue';
 
@@ -378,27 +378,12 @@
     params.loadingDown = true;
     try {
       const response = await DownloadPerformanceLogPar(params);
-
       // 使用 response.data 获取文件内容，并使用 response.headers['content-type'] 获取文件类型
       const blob = new Blob([response.data], {
         type: response.headers['content-type'],
       });
-
-      let fileExt: string | undefined = 'txt';
-      if (response.headers['content-disposition']) {
-        const matches = /filename="(.+\.\w+)"/.exec(
-          response.headers['content-disposition']
-        );
-        if (matches) {
-          fileExt = matches[1].split('.').pop();
-        }
-      }
-      const fileName = `${params.taskId}.${fileExt}`;
-      downloadFile(
-        window.URL.createObjectURL(blob),
-        fileName,
-        response.headers['content-type']
-      );
+      const fileName = `${params.taskId}`;
+      downloadBlob(blob, fileName);
     } catch (err) {
       console.error('Download request failed.');
     } finally {

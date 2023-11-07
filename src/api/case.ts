@@ -40,17 +40,43 @@ export function CreateEdpCasePar(data: CreateEdpCase) {
   return axios.post<CreateEdpCaseRes>('/api/edp_Case_list/run_edp_Case', data);
 }
 
-export interface DownloadCaseLog {
-  taskId: string;
+export interface editEdpCase {
+  caseName: string;
 }
 
-export interface DownloadCaseLogRes {
-  data: Blob;
+export interface EditEdpCaseRes {
+  data: [];
 }
 
-export function DownloadCaseLogPar(data: any) {
-  return axios.post<DownloadCaseLogRes, any>(
-    '/api/edp_Case_list/download_Case_logs',
-    data
-  );
+export interface ViewEdpCaseDetail {
+  id: string;
+  scenarioName: string;
+  account: string;
+  market: string;
+  actionType: string;
+  comment: string;
+  orderQty: number;
+  ordType: string;
+  side: string;
+  symbol: string;
+  timeInForce: string;
+  crossingPriceType: string;
+  rule80A: string;
+  cashMargin: string;
+  marginTransactionType: string;
+  minQty: number;
+  orderClassification: string;
+  selfTradePreventionId: string;
+  price: number;
+  orderStatus: [];
+  errorCode: string;
+}
+
+export function EditEdpCasePar(params: editEdpCase) {
+  return axios.get<EditEdpCaseRes>('/api/edp_test_case/view', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
 }

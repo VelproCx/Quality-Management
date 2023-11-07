@@ -175,13 +175,40 @@
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
         <template #operations="{ record }">
-          <a-button type="text" size="small" @click="editCase(record)">
+          <a-button type="text" size="small" @click="openViewDialog(record)">
             {{ $t('searchTable.columns.operations.editCase') }}
           </a-button>
         </template>
       </a-table>
     </a-card>
   </div>
+  <a-modal
+    :visible="showViewDialog"
+    title="Case Details"
+    ok-text="Confirm"
+    cancel-text="Cancel"
+    @cancel="closeViewDialog"
+    width="900px"
+  >
+    <a-form :model="detailsForm">
+      <a-row :gutter="12">
+        <a-col v-for="(item, index) in detailsForm.data" :key="index">
+          <a-collapse>
+            <a-collapse-item :header="item.ScenarioName" accordion>
+              <template v-for="(value, field) in item" :key="field">
+                <a-form-item :field="`${index}.${field}`" :label="field">
+                  <a-input
+                    v-model="item[field]"
+                    :placeholder="`请输入${field}`"
+                  />
+                </a-form-item>
+              </template>
+            </a-collapse-item>
+          </a-collapse>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
@@ -200,8 +227,8 @@
     PolicyParams,
     CreateEdpCasePar,
     CreateEdpCase,
-    DownloadCaseLogPar,
-    DownloadCaseLog,
+    EditEdpCasePar,
+    ViewEdpCaseDetail,
   } from '@/api/case';
   import { UserForm } from '@/api/user';
   import { Message } from '@arco-design/web-vue';
@@ -227,6 +254,9 @@
   const storedData = sessionStorage.getItem('userData');
   const userData = ref<UserForm | null>(null);
   const confirmLoading = ref(false);
+  const showViewDialog = ref(false);
+  //   const detailsCase: ref<ViewEdpCaseDetail[]> = ref([]);
+
   const basePagination: Pagination = {
     current: 1,
     pageSize: 10,
@@ -240,6 +270,35 @@
     source: '',
     commands: [{ value: '' }],
   });
+
+  //   const detailsForm: ViewEdpCaseDetail = reactive({
+  //     id: '',
+  //     scenarioName: '',
+  //     account: '',
+  //     market: '',
+  //     actionType: '',
+  //     comment: '',
+  //     orderQty: 0, // 修改为数字类型
+  //     ordType: '',
+  //     side: '',
+  //     symbol: '',
+  //     timeInForce: '',
+  //     crossingPriceType: '',
+  //     rule80A: '',
+  //     cashMargin: '',
+  //     marginTransactionType: '',
+  //     minQty: 0, // 修改为数字类型
+  //     orderClassification: '',
+  //     selfTradePreventionId: '',
+  //     price: 0, // 修改为数字类型
+  //     orderStatus: [],
+  //     errorCode: '',
+  //     taskId: '',
+  //   });
+  const detailsForm = reactive({
+    data: [{ value: [] }],
+  });
+
   // 定义列表显示密度选项
   const densityList = computed(() => [
     {
@@ -294,6 +353,24 @@
   };
   const handleDelete = (index: number) => {
     createTaskForm.commands.splice(index, 1);
+  };
+  const openViewDialog = async (record: any) => {
+    setLoading(true);
+    try {
+      showViewDialog.value = true;
+      const data = await EditEdpCasePar(record);
+      detailsForm.data = data.data;
+      console.log(detailsForm.data);
+    } catch (err) {
+      Message.error('Loading Error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closeViewDialog = () => {
+    // detailsForm.data = {};
+    showViewDialog.value = false;
   };
 
   const openCreateDialog = () => {

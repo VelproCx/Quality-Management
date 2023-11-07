@@ -1,38 +1,42 @@
 // downloadUtils.ts
 
-export default function downloadFile(
-  fileUrl: string,
-  fileName: string,
-  fileType: string
-) {
+// 用于下载 Blob 对象
+export default function downloadBlob(blob: Blob, fileName: string) {
+  // 使用 Blob 对象创建一个 URL
+  const url = window.URL.createObjectURL(blob);
+
   const link = document.createElement('a');
   link.style.display = 'none';
-  link.href = fileUrl;
-  link.target = '_blank';
+  link.href = url;
 
   // 设置 Content-Disposition 头部
   const disposition = `attachment; filename=${fileName}`;
   link.setAttribute('download', disposition);
+  console.log(blob);
 
-  // 设置合适的文件扩展名
-  let fileExt = 'txt'; // 默认为 .txt
-  if (fileType === 'application/zip') {
-    fileExt = 'zip';
-  } else if (fileType === 'text/plain') {
-    fileExt = 'log';
-  } else if (
-    fileType ===
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-  ) {
-    fileExt = 'xlsx';
-  } // 在这里添加更多文件类型的判断和扩展名
+  // 默认文件扩展名
+  let fileExt = 'txt'; // 如果不知道文件类型，默认使用 .txt
+  if (blob.type) {
+    if (blob.type === 'application/zip') {
+      fileExt = 'zip';
+    } else if (blob.type === 'text/plain') {
+      fileExt = 'log';
+    } else if (
+      blob.type ===
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      fileExt = 'xlsx';
+    } // 在这里添加更多文件类型的判断和扩展名
 
-  fileName = `${fileName}.${fileExt}`;
-  link.download = fileName;
+    fileName = `${fileName}`;
+    link.download = fileName;
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 清理 URL 对象
+    window.URL.revokeObjectURL(url);
+  }
 }
-
-export { downloadFile };
+export { downloadBlob };

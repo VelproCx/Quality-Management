@@ -257,7 +257,7 @@
     DownloadRegressionLog,
     DownloadRegressionRepPar,
   } from '@/api/regression';
-  import { downloadFile } from '@/utils/download';
+  import { downloadBlob } from '@/utils/download';
   import { Message } from '@arco-design/web-vue';
   import { UserForm } from '@/api/user';
 
@@ -406,22 +406,8 @@
       const blob = new Blob([response.data], {
         type: response.headers['content-type'],
       });
-
-      let fileExt: string | undefined = 'txt';
-      if (response.headers['content-disposition']) {
-        const matches = /filename="(.+\.\w+)"/.exec(
-          response.headers['content-disposition']
-        );
-        if (matches) {
-          fileExt = matches[1].split('.').pop();
-        }
-      }
-      const fileName = `${params.taskId}.${fileExt}`;
-      downloadFile(
-        window.URL.createObjectURL(blob),
-        fileName,
-        response.headers['content-type']
-      );
+      const fileName = `${params.taskId}`;
+      downloadBlob(blob, fileName);
     } catch (err) {
       console.error('Download request failed.');
     } finally {
@@ -433,27 +419,15 @@
     params.loadingDown = true;
     try {
       const response = await DownloadRegressionRepPar(params);
-      //   将从后端获取的二进制数据作为 Blob 对象存储
+      //   //   将从后端获取的二进制数据作为 Blob 对象存储
       const blob = new Blob([response.data], {
         type: response.headers['content-type'],
       });
-      // 定义文件类型
-      let fileExt: string | undefined = 'txt';
-      if (response.headers['content-disposition']) {
-        const matches = /filename="(.+\.\w+)"/.exec(
-          response.headers['content-disposition']
-        );
-        if (matches) {
-          fileExt = matches[1].split('.').pop();
-        }
-      }
-      const fileName = `${params.taskId}.${fileExt}`;
+      console.log(response.data);
+      console.log(response.headers['content-type']);
+      const fileName = `${params.taskId}.xlsx`;
       //   调用公共函数下载文件
-      downloadFile(
-        window.URL.createObjectURL(blob),
-        fileName,
-        response.headers['content-type']
-      );
+      downloadBlob(blob, fileName);
     } catch (err) {
       console.error('Download request failed.');
     } finally {
